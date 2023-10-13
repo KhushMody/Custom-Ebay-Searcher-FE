@@ -7,13 +7,23 @@ function Form() {
     condition: [],
     shippingOptions: [],
     distance: '10',
-    location: '',
+    location: '90007',
+    zipCode: ''
   });
+
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [keywordError, setKeywordError] = useState('');
+  const [keywordInputStyles, setKeywordInputStyles] = useState({});
+  const [locationError, setLocationError] = useState('');
+  const [locationInputStyles, setLocationInputStyles] = useState({});
 
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-
+    setKeywordError('');
+    setKeywordInputStyles({});
+    setLocationError('');
+    setLocationInputStyles({});
     if (type === 'checkbox') {
         // For checkboxes with multiple options
         if( name === 'condition'){
@@ -65,6 +75,11 @@ function Form() {
 
   const handleReset = () => {
     // Reset the form data to its initial state
+    setFormSubmitted(false);
+    setKeywordInputStyles({});
+    setKeywordError('');
+    setLocationError('');
+    setLocationInputStyles({});
     setFormData({
         keyword: '',
         category: 'All Categories',
@@ -74,29 +89,49 @@ function Form() {
         location: '',
     });
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Build the query string based on form data
+    setFormSubmitted(true);
     const queryParams = new URLSearchParams(formData).toString();
-
-    // Make a GET request to your Node.js server
-    console.log(`localhost:5000/api/search?${queryParams}`)
-    fetch(`http://localhost:5000/api/search?${queryParams}`)
-    .then((response) => {
-        if (!response.ok) {
-        throw new Error('Network response was not ok');
-        }
-        // console.log(response.json());
-        return response.json();
-    })
-    .then((data) => {
-        // Handle the response data (data) as needed
-        console.log('Server response:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    if (formData.keyword.trim() === '') {
+      setKeywordError('Please enter a keyword.');
+      setKeywordInputStyles({
+        border: '1px solid red'
+      });
+      console.log('no keyword found');
+      if(formData.zipCode.trim() === ''){
+        setLocationError('Please enter a zip code')
+        setLocationInputStyles({
+          border: '1px solid red'
+        });
+        console.log('no zip code found');
+      }
+    }
+    else if(formData.zipCode.trim() === ''){
+      setLocationError('Please enter a zip code')
+      setLocationInputStyles({
+        border: '1px solid red'
+      });
+      console.log('no zip code found');
+    }
+    else{
+      console.log(`localhost:5000/api/search?${queryParams}`)
+      fetch(`http://localhost:5000/api/search?${queryParams}`)
+      .then((response) => {
+          if (!response.ok) {
+          throw new Error('Network response was not ok');
+          }
+          // console.log(response.json());
+          return response.json();
+      })
+      .then((data) => {
+          // Handle the response data (data) as needed
+          console.log('Server response:', data);
+      })
+      .catch((error) => {
+          console.error('Error:', error);
+      });
+    }
   };
 
   const formStyles = {
@@ -120,12 +155,16 @@ function Form() {
                         name="keyword"
                         value={formData.keyword}
                         onChange={handleChange}
+                        style={keywordInputStyles}
                         required
                     />
-
-            </div>
+            {formSubmitted && formData.keyword.trim() === '' && (
+              <div className="text-danger" style={{display:'flex'}}>{keywordError}</div>
+            )}
             
             </div>
+            </div>
+            
 
         <div className="row mb-3">
             <label htmlFor="category" className="col-md-2 col-form-label">
@@ -256,7 +295,7 @@ function Form() {
                 <label htmlFor="location" className="col-md-2 col-form-label">
                     From*
                 </label>
-                <div className='col-md-3'>
+                <div className='col-md-3' style={{textAlign:'left'}}>
                 <div>
                     <input
                     type="radio"
@@ -266,7 +305,6 @@ function Form() {
                     checked={formData.location === '90007'}
                     onChange={handleChange}
                     className="form-check-input"
-                    selected
                     />
                     <label className="form-check-label" htmlFor="currentLocation">
                     'Current Location'
@@ -294,7 +332,11 @@ function Form() {
                     value={formData.location === 'abcde' ? formData.zipCode : ''}
                     onChange={handleChange}
                     className="form-control"
+                    style={locationInputStyles}
                 />
+                {formSubmitted && formData.zipCode.trim() === '' && (
+              <div className="text-danger" style={{display:'flex'}}>{locationError}</div>
+            )}
                 </div>
                 </div>
         </div>
