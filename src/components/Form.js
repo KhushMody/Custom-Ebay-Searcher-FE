@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Table from './Table';
 
 function Form() {
   const [formData, setFormData] = useState({
@@ -10,6 +11,8 @@ function Form() {
     location: '90007',
     zipCode: ''
   });
+
+  const [data, setData] = useState();
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [keywordError, setKeywordError] = useState('');
@@ -126,7 +129,8 @@ function Form() {
       })
       .then((data) => {
           // Handle the response data (data) as needed
-          console.log('Server response:', data);
+          setData(data.findItemsAdvancedResponse[0].searchResult);
+          console.log('Server response:', data.findItemsAdvancedResponse[0].searchResult);
       })
       .catch((error) => {
           console.error('Error:', error);
@@ -140,6 +144,7 @@ function Form() {
   };
 
   return (
+    <>
     <div className="container" style={formStyles}>
         <h1>Product Search</h1>
       <form onSubmit={handleSubmit} style={{textAlign:'center'}} noValidate>
@@ -350,6 +355,10 @@ function Form() {
         </button>
       </form>
     </div>
+    <div className='container'>
+      {data && <Table data={data} />}
+    </div>
+    </>
   );
 }
 

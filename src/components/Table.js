@@ -1,0 +1,86 @@
+import React, { useState,useEffect } from "react";
+import Card from "./Card";
+
+function createEntries(cardTerm, i){
+    return(<Card
+        data={cardTerm}
+        keys={i}
+    />);
+}
+
+function Table(props) {
+    const dataEntries = props.data;
+    const [currentPage, setCurrentPage] = useState(1);
+  
+    useEffect(() => {
+      if (dataEntries === undefined) return;
+    }, [dataEntries]);
+  
+    // Calculate the total number of pages based on the count of items
+    const totalCount = parseInt(dataEntries[0]["@count"], 10);
+    const itemsPerPage = 10;
+    const totalPages = Math.ceil(totalCount / itemsPerPage);
+  
+    // Create an array of page numbers
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(i);
+    }
+  
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = currentPage * itemsPerPage;
+  
+    return (
+      <>
+        {totalCount > 0 && (
+          <>
+            <table className="table table-dark">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Image</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Shipping</th>
+                  <th scope="col">Zip</th>
+                  <th scope="col">Wish List</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dataEntries[0]["item"].slice(startIndex, endIndex).map((item, i) => {
+                  return createEntries(item, i + 1 + startIndex);
+                })}
+              </tbody>
+            </table>
+  
+            <div className="pagination">
+              <button
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              {pageNumbers.map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`btn ${currentPage === page ? "btn-primary" : "btn-secondary"}`}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+            </div>
+          </>
+        )}
+        {totalCount === 0 && <h1>No content received from the server</h1>}
+      </>
+    );
+}
+
+export default Table;
