@@ -1,17 +1,19 @@
 import React, { useState,useEffect } from "react";
 import Card from "./Card";
 
-function createEntries(cardTerm, i){
+function createEntries(cardTerm, i, setSelectedItem){
     return(<Card
         data={cardTerm}
         keys={i}
+        key = {i}
+        setSelectedItem={setSelectedItem}
     />);
 }
 
 function Table(props) {
     const dataEntries = props.data;
     const [currentPage, setCurrentPage] = useState(1);
-  
+    //setCurrentTable('findItems');
     useEffect(() => {
       if (dataEntries === undefined) return;
     }, [dataEntries]);
@@ -29,12 +31,11 @@ function Table(props) {
   
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = currentPage * itemsPerPage;
-  
     return (
       <>
         {totalCount > 0 && (
           <>
-            <table className="table table-dark">
+            <table className="table table-striped table-dark">
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -48,7 +49,7 @@ function Table(props) {
               </thead>
               <tbody>
                 {dataEntries[0]["item"].slice(startIndex, endIndex).map((item, i) => {
-                  return createEntries(item, i + 1 + startIndex);
+                  return createEntries(item, i + 1 + startIndex, props.setSelectedItem);
                 })}
               </tbody>
             </table>
@@ -79,6 +80,7 @@ function Table(props) {
           </>
         )}
         {totalCount === 0 && <h1>No content received from the server</h1>}
+        {/* {currentTable === ''} */}
       </>
     );
 }

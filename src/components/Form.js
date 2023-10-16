@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Table from './Table';
+import Item from './Item';
 
 function Form() {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ function Form() {
   });
 
   const [data, setData] = useState();
+  const [selectedItem, setSelectedItem] = useState(false);
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [keywordError, setKeywordError] = useState('');
@@ -95,6 +97,7 @@ function Form() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormSubmitted(true);
+    setSelectedItem(false);
     const queryParams = new URLSearchParams(formData).toString();
     if (formData.keyword.trim() === '') {
       setKeywordError('Please enter a keyword.');
@@ -118,7 +121,7 @@ function Form() {
       console.log('no zip code found');
     }
     else{
-      console.log(`localhost:5000/api/search?${queryParams}`)
+      console.log(`http://localhost:5000/api/search?${queryParams}`)
       fetch(`http://localhost:5000/api/search?${queryParams}`)
       .then((response) => {
           if (!response.ok) {
@@ -356,7 +359,8 @@ function Form() {
       </form>
     </div>
     <div className='container'>
-      {data && <Table data={data} />}
+      {!selectedItem && data && <Table data={data} setSelectedItem={setSelectedItem}/>}
+      {selectedItem && data && <Item selectedItem={selectedItem} setSelectedItem={setSelectedItem}/>}
     </div>
     </>
   );
