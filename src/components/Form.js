@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import Table from './Table';
 import Item from './Item';
+import Photos from './Photos';
+import Shipping from './Shipping';
+import NavBar from './NavBar';
 
 function Form() {
   const [formData, setFormData] = useState({
@@ -15,6 +18,10 @@ function Form() {
 
   const [data, setData] = useState();
   const [selectedItem, setSelectedItem] = useState(false);
+  const [selectedNavItem, setSelectedNavItem] = useState('product');
+  const [photosData, setPhotosData] = useState();
+  const [itemId, setItemId] = useState();
+  const [navigationBar, setNavigationBar] = useState(false);
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [keywordError, setKeywordError] = useState('');
@@ -85,6 +92,7 @@ function Form() {
     setKeywordError('');
     setLocationError('');
     setLocationInputStyles({});
+    setNavigationBar(false);
     setFormData({
         keyword: '',
         category: 'All Categories',
@@ -98,6 +106,10 @@ function Form() {
     e.preventDefault();
     setFormSubmitted(true);
     setSelectedItem(false);
+    setSelectedNavItem('product');
+    setItemId();
+    setPhotosData();
+    setNavigationBar(false);
     const queryParams = new URLSearchParams(formData).toString();
     if (formData.keyword.trim() === '') {
       setKeywordError('Please enter a keyword.');
@@ -359,8 +371,11 @@ function Form() {
       </form>
     </div>
     <div className='container'>
-      {!selectedItem && data && <Table data={data} setSelectedItem={setSelectedItem}/>}
-      {selectedItem && data && <Item selectedItem={selectedItem} setSelectedItem={setSelectedItem}/>}
+      {navigationBar && <NavBar selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData} selectedItem={selectedItem}/>}
+      {!selectedItem && data && <Table data={data} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar}/>}
+      {selectedItem && data && selectedNavItem === 'product' && <Item selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData}/>}
+      {selectedItem && data && selectedNavItem === 'photos' && <Photos selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData = {setPhotosData} photosData={photosData}/>}
+      {selectedItem && data && selectedNavItem === 'shipping' && <Shipping itemId={itemId} data={data}/>}
     </div>
     </>
   );

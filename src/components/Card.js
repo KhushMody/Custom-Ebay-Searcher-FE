@@ -22,6 +22,8 @@ function Card(props){
             // Handle the response data from your backend as needed
             console.log('Backend response:', data);
             props.setSelectedItem(data);
+            props.setItemId(itemId);
+            props.setNavigationBar(true);
           })
           .catch((error) => {
             console.error('Error:', error);

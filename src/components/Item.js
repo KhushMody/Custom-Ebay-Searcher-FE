@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Navbar } from 'react-bootstrap';
+import NavBar from './NavBar';
 
 const Item = (props) => {
 
     const [showModal, setShowModal] = useState(false);
+    //const [selectedNavItem, setSelectedNavItem] = useState('product');
 
     const handleClose = () => setShowModal(false);
     const handleShow = () => setShowModal(true);
@@ -52,6 +54,8 @@ const Item = (props) => {
                 <h3 style={{alignItems:'center'}}>{props.selectedItem.Item.Title}</h3>
             </div>
             {renderPictureModal()}
+
+            
             <table class="table table-striped table-dark">
                 <tbody>
                     <tr>

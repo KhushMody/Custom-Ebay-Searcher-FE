@@ -1,12 +1,14 @@
 import React, { useState,useEffect } from "react";
 import Card from "./Card";
 
-function createEntries(cardTerm, i, setSelectedItem){
+function createEntries(cardTerm, i, setSelectedItem, setItemId, setNavigationBar){
     return(<Card
         data={cardTerm}
         keys={i}
         key = {i}
         setSelectedItem={setSelectedItem}
+        setItemId = {setItemId}
+        setNavigationBar = {setNavigationBar}
     />);
 }
 
@@ -49,7 +51,7 @@ function Table(props) {
               </thead>
               <tbody>
                 {dataEntries[0]["item"].slice(startIndex, endIndex).map((item, i) => {
-                  return createEntries(item, i + 1 + startIndex, props.setSelectedItem);
+                  return createEntries(item, i + 1 + startIndex, props.setSelectedItem, props.setItemId, props.setNavigationBar);
                 })}
               </tbody>
             </table>
