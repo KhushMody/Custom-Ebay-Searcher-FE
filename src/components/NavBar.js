@@ -27,6 +27,32 @@ function NavBar(props){
             console.log(navItem,props.selectedNavItem);
     };
 
+    const handleNavItemClickSimilarProducts = (navItem) => {
+        const itemID = props.selectedItem.Item.ItemID
+        //console.log('title for photos backend', itemID)
+        const backendUrl = `http://localhost:5000/api/similar-products?itemID=${itemID}`;
+
+        // Make a GET request to your backend
+        fetch(backendUrl)
+            .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+            })
+            .then((data) => {
+            // Handle the response data from your backend as needed
+                console.log('Backend response for similar products:', data);
+                props.setSimilarProductsData(data);
+                props.setSelectedNavItem(navItem);
+            })
+            .catch((error) => {
+            console.error('Error:', error);
+            });
+            
+            console.log(navItem,props.selectedNavItem);
+    };
+
     const handleNavItemClick = (navItem) => {
         props.setSelectedNavItem(navItem);
         console.log(navItem,props.selectedNavItem);
@@ -81,7 +107,7 @@ function NavBar(props){
                         Seller
                     </li>
                     <li
-                        onClick={() => handleNavItemClick('similar-products')}
+                        onClick={() => handleNavItemClickSimilarProducts('similar-products')}
                         style={props.selectedNavItem === 'similar-products' ? activeNavItemStyle : navItemStyle}
                     >
                         Similar Products

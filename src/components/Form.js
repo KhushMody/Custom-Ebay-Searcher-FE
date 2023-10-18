@@ -4,6 +4,8 @@ import Item from './Item';
 import Photos from './Photos';
 import Shipping from './Shipping';
 import NavBar from './NavBar';
+import Seller from './Seller';
+import SimilarProduct from './SimilarProduct';
 
 function Form() {
   const [formData, setFormData] = useState({
@@ -22,6 +24,7 @@ function Form() {
   const [photosData, setPhotosData] = useState();
   const [itemId, setItemId] = useState();
   const [navigationBar, setNavigationBar] = useState(false);
+  const [similarProductsData, setSimilarProductsData] = useState();
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [keywordError, setKeywordError] = useState('');
@@ -93,6 +96,7 @@ function Form() {
     setLocationError('');
     setLocationInputStyles({});
     setNavigationBar(false);
+    setSimilarProductsData();
     setFormData({
         keyword: '',
         category: 'All Categories',
@@ -110,6 +114,7 @@ function Form() {
     setItemId();
     setPhotosData();
     setNavigationBar(false);
+    setSimilarProductsData();
     const queryParams = new URLSearchParams(formData).toString();
     if (formData.keyword.trim() === '') {
       setKeywordError('Please enter a keyword.');
@@ -371,11 +376,13 @@ function Form() {
       </form>
     </div>
     <div className='container'>
-      {navigationBar && <NavBar selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData} selectedItem={selectedItem}/>}
+      {navigationBar && <NavBar selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData} selectedItem={selectedItem} setSimilarProductsData={setSimilarProductsData}/>}
       {!selectedItem && data && <Table data={data} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar}/>}
       {selectedItem && data && selectedNavItem === 'product' && <Item selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData}/>}
       {selectedItem && data && selectedNavItem === 'photos' && <Photos selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData = {setPhotosData} photosData={photosData}/>}
       {selectedItem && data && selectedNavItem === 'shipping' && <Shipping itemId={itemId} data={data}/>}
+      {selectedItem && data && selectedNavItem === 'seller' && <Seller selectedItem={selectedItem}/>}
+      {selectedItem && data && selectedNavItem === 'similar-products' && <SimilarProduct similarProductsData={similarProductsData}/>}
     </div>
     </>
   );
