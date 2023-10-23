@@ -26,7 +26,8 @@ function Form() {
   const [itemId, setItemId] = useState();
   const [navigationBar, setNavigationBar] = useState(false);
   const [similarProductsData, setSimilarProductsData] = useState();
-  const [favoritesData, setFavoritesData] = useState(false);
+  const [favoritesData, setFavoritesData] = useState();
+  const [checkWishlist, setCheckWishlist] = useState(false);
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [keywordError, setKeywordError] = useState('');
@@ -99,7 +100,7 @@ function Form() {
     setLocationInputStyles({});
     setNavigationBar(false);
     setSimilarProductsData();
-    setFavoritesData(false);
+    setCheckWishlist(false);
     setFormData({
         keyword: '',
         category: 'All Categories',
@@ -118,7 +119,7 @@ function Form() {
     setPhotosData();
     setNavigationBar(false);
     setSimilarProductsData();
-    setFavoritesData(false);
+    setCheckWishlist(false);
     const queryParams = new URLSearchParams(formData).toString();
     if (formData.keyword.trim() === '') {
       setKeywordError('Please enter a keyword.');
@@ -175,6 +176,7 @@ function Form() {
         // Set the favoritesData state with the retrieved data
         console.log('Data from mongoDB:',data);
         setFavoritesData(data);
+        setCheckWishlist(true);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -420,14 +422,14 @@ const activeButtonStyle = {
       <button style={favoritesData === false ? buttonStyle : activeButtonStyle} onClick={handleWishList}>Wishlist</button>
     </div>
     <div className='container'>
-      {!favoritesData && navigationBar && <NavBar selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData} selectedItem={selectedItem} setSimilarProductsData={setSimilarProductsData}/>}
-      {!favoritesData && !selectedItem && data && <Table data={data} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar} setFavoritesData={setFavoritesData} />}
-      {!favoritesData && selectedItem && data && selectedNavItem === 'product' && <Item selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData}/>}
-      {!favoritesData && selectedItem && data && selectedNavItem === 'photos' && <Photos selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData = {setPhotosData} photosData={photosData}/>}
-      {!favoritesData && selectedItem && data && selectedNavItem === 'shipping' && <Shipping itemId={itemId} data={data}/>}
-      {!favoritesData && selectedItem && data && selectedNavItem === 'seller' && <Seller selectedItem={selectedItem}/>}
-      {!favoritesData && selectedItem && data && selectedNavItem === 'similar-products' && <SimilarProduct similarProductsData={similarProductsData}/>}
-      {favoritesData && <WishList favoritesData={favoritesData} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar} setFavoritesData={setFavoritesData} removeCartItem={removeCartItem}/>}
+      {!checkWishlist && navigationBar && <NavBar selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData} selectedItem={selectedItem} setSimilarProductsData={setSimilarProductsData}/>}
+      {!checkWishlist && !selectedItem && data && <Table data={data} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar} setFavoritesData={setFavoritesData} favoritesData={favoritesData} removeCartItem={removeCartItem}/>}
+      {!checkWishlist && selectedItem && data && selectedNavItem === 'product' && <Item selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData}/>}
+      {!checkWishlist && selectedItem && data && selectedNavItem === 'photos' && <Photos selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData = {setPhotosData} photosData={photosData}/>}
+      {!checkWishlist && selectedItem && data && selectedNavItem === 'shipping' && <Shipping itemId={itemId} data={data}/>}
+      {!checkWishlist && selectedItem && data && selectedNavItem === 'seller' && <Seller selectedItem={selectedItem}/>}
+      {!checkWishlist && selectedItem && data && selectedNavItem === 'similar-products' && <SimilarProduct similarProductsData={similarProductsData}/>}
+      {checkWishlist && <WishList favoritesData={favoritesData} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar} setFavoritesData={setFavoritesData} removeCartItem={removeCartItem}/>}
     </div>
     </>
   );
