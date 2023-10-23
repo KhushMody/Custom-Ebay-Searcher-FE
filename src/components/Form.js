@@ -6,6 +6,7 @@ import Shipping from './Shipping';
 import NavBar from './NavBar';
 import Seller from './Seller';
 import SimilarProduct from './SimilarProduct';
+import WishList from './WishList';
 
 function Form() {
   const [formData, setFormData] = useState({
@@ -25,6 +26,7 @@ function Form() {
   const [itemId, setItemId] = useState();
   const [navigationBar, setNavigationBar] = useState(false);
   const [similarProductsData, setSimilarProductsData] = useState();
+  const [favoritesData, setFavoritesData] = useState(false);
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [keywordError, setKeywordError] = useState('');
@@ -97,6 +99,7 @@ function Form() {
     setLocationInputStyles({});
     setNavigationBar(false);
     setSimilarProductsData();
+    setFavoritesData(false);
     setFormData({
         keyword: '',
         category: 'All Categories',
@@ -115,6 +118,7 @@ function Form() {
     setPhotosData();
     setNavigationBar(false);
     setSimilarProductsData();
+    setFavoritesData(false);
     const queryParams = new URLSearchParams(formData).toString();
     if (formData.keyword.trim() === '') {
       setKeywordError('Please enter a keyword.');
@@ -158,16 +162,52 @@ function Form() {
     }
   };
 
+  const handleWishList = () => {
+    // Make an API request to retrieve data from the "favorites" collection
+    fetch('http://localhost:5000/api/favorites')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Set the favoritesData state with the retrieved data
+        console.log('Data from mongoDB:',data);
+        setFavoritesData(data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
+  
+  const removeCartItem = (itemId) => {
+    // Filter out the item with the specified itemId and update the cartItems state
+    setFavoritesData(favoritesData.filter((item) => item.itemId !== itemId));
+  };
+
   const formStyles = {
     background: 'black',
     color: 'white',
   };
 
+  const buttonStyle = {
+    padding: '10px 20px',
+    cursor: 'pointer',
+};
+
+const activeButtonStyle = {
+    backgroundColor: 'black',
+    color: 'white',
+    padding: '10px 20px',
+    cursor: 'pointer',
+};
+
   return (
     <>
     <div className="container" style={formStyles}>
         <h1>Product Search</h1>
-      <form onSubmit={handleSubmit} style={{textAlign:'center'}} noValidate>
+      <form onSubmit={handleSubmit} style={{textAlign:'center'}} className='mb-3' noValidate>
             <div className="row align-items-center mb-3">
             <div className="col-md-2">
                 <label for="keyword" className="col-form-label">Keyword*</label>
@@ -375,14 +415,19 @@ function Form() {
         </button>
       </form>
     </div>
+    <div className='container'> 
+      <button style={favoritesData === false ? activeButtonStyle : buttonStyle} onClick={handleSubmit}>Results</button>
+      <button style={favoritesData === false ? buttonStyle : activeButtonStyle} onClick={handleWishList}>Wishlist</button>
+    </div>
     <div className='container'>
-      {navigationBar && <NavBar selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData} selectedItem={selectedItem} setSimilarProductsData={setSimilarProductsData}/>}
-      {!selectedItem && data && <Table data={data} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar}/>}
-      {selectedItem && data && selectedNavItem === 'product' && <Item selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData}/>}
-      {selectedItem && data && selectedNavItem === 'photos' && <Photos selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData = {setPhotosData} photosData={photosData}/>}
-      {selectedItem && data && selectedNavItem === 'shipping' && <Shipping itemId={itemId} data={data}/>}
-      {selectedItem && data && selectedNavItem === 'seller' && <Seller selectedItem={selectedItem}/>}
-      {selectedItem && data && selectedNavItem === 'similar-products' && <SimilarProduct similarProductsData={similarProductsData}/>}
+      {!favoritesData && navigationBar && <NavBar selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData} selectedItem={selectedItem} setSimilarProductsData={setSimilarProductsData}/>}
+      {!favoritesData && !selectedItem && data && <Table data={data} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar} setFavoritesData={setFavoritesData} />}
+      {!favoritesData && selectedItem && data && selectedNavItem === 'product' && <Item selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData}/>}
+      {!favoritesData && selectedItem && data && selectedNavItem === 'photos' && <Photos selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData = {setPhotosData} photosData={photosData}/>}
+      {!favoritesData && selectedItem && data && selectedNavItem === 'shipping' && <Shipping itemId={itemId} data={data}/>}
+      {!favoritesData && selectedItem && data && selectedNavItem === 'seller' && <Seller selectedItem={selectedItem}/>}
+      {!favoritesData && selectedItem && data && selectedNavItem === 'similar-products' && <SimilarProduct similarProductsData={similarProductsData}/>}
+      {favoritesData && <WishList favoritesData={favoritesData} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar} setFavoritesData={setFavoritesData} removeCartItem={removeCartItem}/>}
     </div>
     </>
   );
