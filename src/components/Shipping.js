@@ -1,20 +1,42 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 
-function Shipping(props){
+function Shipping(props) {
     console.log(props.itemId);
     const dataEntries = props.data;
-    const selectedItem = dataEntries[0]["item"].find(item => item.itemId[0] === props.itemId);
+    console.log(dataEntries);
+    console.log(props.favoritesData.find(item => item.itemId === props.itemId));
+    
+    // Check if dataEntries is undefined and use props.favoritesData as a fallback
+    const selectedItemFromData = dataEntries
+        ? dataEntries[0]["item"].find(item => item.itemId[0] === props.itemId)
+        : null;
+
+    const selectedItem = selectedItemFromData || props.favoritesData.find(item => item.itemId === props.itemId);
     console.log(selectedItem);
-    const shippingInfo = selectedItem.shippingInfo[0];
+
+    // If dataEntries is undefined, use shippingInfo and shippingCost from favoritesData
+    var shippingInfo;
+    if(selectedItemFromData){
+        shippingInfo = selectedItem.shippingInfo[0];
+    }
+    else{
+        shippingInfo = selectedItem.shippingInfo;
+    }
+    // const shippingInfo = selectedItem.shippingInfo
+    //     ? selectedItem.shippingInfo[0]
+    //     : selectedItem.shippingInfo;
+
+    console.log("shipping info", shippingInfo);
+
     const shippingCost = shippingInfo.shippingServiceCost[0];
-    
 
-    const shippingCostDisplay = shippingCost['@currencyId'] === 'USD' && shippingCost['__value__'] === '0.0' ? 'Free Shipping' : `${shippingCost['@currencyId']} ${shippingCost['__value__']}`;
+    const shippingCostDisplay =
+        shippingCost["@currencyId"] === "USD" && shippingCost["__value__"] === "0.0"
+            ? "Free Shipping"
+            : `${shippingCost["@currencyId"]} ${shippingCost["__value__"]}`;
 
-    
     return (
         <div>
-            <h3>Shipping Information</h3>
             <table className="table table-striped table-dark">
                 <tbody>
                     {shippingInfo.shippingServiceCost && (
@@ -23,7 +45,7 @@ function Shipping(props){
                             <td>{shippingCostDisplay}</td>
                         </tr>
                     )}
-                    
+
                     {shippingInfo.shipToLocations && (
                         <tr>
                             <th scope="row">Shipping Locations</th>
@@ -58,6 +80,6 @@ function Shipping(props){
             </table>
         </div>
     );
-};
+}
 
 export default Shipping;

@@ -28,6 +28,10 @@ function Form() {
   const [similarProductsData, setSimilarProductsData] = useState();
   const [favoritesData, setFavoritesData] = useState();
   const [checkWishlist, setCheckWishlist] = useState(false);
+  const [showProgressBar, setShowProgressBar] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [wishListArray, setWishListArray] = useState([]);
+
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [keywordError, setKeywordError] = useState('');
@@ -120,6 +124,7 @@ function Form() {
     setNavigationBar(false);
     setSimilarProductsData();
     setCheckWishlist(false);
+    startProgressBar();
     const queryParams = new URLSearchParams(formData).toString();
     if (formData.keyword.trim() === '') {
       setKeywordError('Please enter a keyword.');
@@ -155,6 +160,7 @@ function Form() {
       .then((data) => {
           // Handle the response data (data) as needed
           setData(data.findItemsAdvancedResponse[0].searchResult);
+          setShowProgressBar(false);
           console.log('Server response:', data.findItemsAdvancedResponse[0].searchResult);
       })
       .catch((error) => {
@@ -205,16 +211,23 @@ const activeButtonStyle = {
     cursor: 'pointer',
 };
 
+const startProgressBar = () => {
+  setShowProgressBar(true);
+  setProgress(50); // Set the progress to 50% immediately
+  // You can continue with the rest of your code to make the API request
+  // ...
+};
+
   return (
     <>
-    <div className="container" style={formStyles}>
-        <h1>Product Search</h1>
-      <form onSubmit={handleSubmit} style={{textAlign:'center'}} className='mb-3' noValidate>
-            <div className="row align-items-center mb-3">
+    <div className="container bg-dark text-white" >
+        <h1 className='mb-3 offset-md-3'>Product Search</h1>
+      <form onSubmit={handleSubmit} className='mb-3 offset-md-3' noValidate>
+            <div className="row mb-3">
             <div className="col-md-2">
                 <label for="keyword" className="col-form-label">Keyword*</label>
             </div>
-            <div className="col-md-6">
+            <div className="col-md-6" style={{paddingLeft:'0'}}>
             <input
                         type="text"
                         className="form-control"
@@ -238,7 +251,7 @@ const activeButtonStyle = {
                 Category
             </label>
             
-            <div className='col-md-2'>
+            <div className='col-md-2' style={{paddingLeft:'0'}}>
                 <select
                     id="category"
                     name="category"
@@ -263,7 +276,7 @@ const activeButtonStyle = {
             <label htmlFor="condition" className="col-md-2 col-form-label">
                 Condition
             </label>
-            <div className='col-md-1'>
+            <div className='col-md-1 form-check form-check-inline'>
                 <input
                 type="checkbox"
                 id="new"
@@ -277,7 +290,7 @@ const activeButtonStyle = {
                 New
                 </label>
             </div>
-            <div className='col-md-1'>
+            <div className='col-md-1 form-check form-check-inline'>
                 <input
                 type="checkbox"
                 id="Used"
@@ -291,7 +304,7 @@ const activeButtonStyle = {
                 Used
                 </label>
             </div>
-            <div className='col-md-2'>
+            <div className='col-md-2 form-check form-check-inline'>
                 <input
                 type="checkbox"
                 id="Unspecified"
@@ -312,7 +325,7 @@ const activeButtonStyle = {
             <label htmlFor="shippingOptions" className="col-md-2 col-form-label">
                 Shipping Options
             </label>
-            <div className='col-md-2'>
+            <div className='col-md-2 form-check form-check-inline'>
                 <input
                 type="checkbox"
                 id="localPickup"
@@ -326,7 +339,7 @@ const activeButtonStyle = {
                 Local Pickup
                 </label>
             </div>
-            <div className='col-md-2'>
+            <div className='col-md-2 form-check form-check-inline'>
                 <input
                 type="checkbox"
                 id="freeShipping"
@@ -346,7 +359,7 @@ const activeButtonStyle = {
               <label htmlFor="distance" className="col-md-2 col-form-label">
                 Distance (Miles)
               </label>
-              <div className='col-md-2'>
+              <div className='col-md-2' style={{paddingLeft:'0'}}>
               <input
                 type="text"
                 className="form-control"
@@ -362,7 +375,7 @@ const activeButtonStyle = {
                 <label htmlFor="location" className="col-md-2 col-form-label">
                     From*
                 </label>
-                <div className='col-md-3' style={{textAlign:'left'}}>
+                <div className='col-md-4 form-check form-check-inline' style={{textAlign:'left'}}>
                 <div>
                     <input
                     type="radio"
@@ -388,7 +401,7 @@ const activeButtonStyle = {
                     className="form-check-input"
                     />
                     <label className="form-check-label" htmlFor="otherLocation">
-                    Other. Please specify zip code:
+                        Other. Please specify zip code:
                     </label>
                 </div>
                 <div>
@@ -408,13 +421,23 @@ const activeButtonStyle = {
                 </div>
         </div>
 
-        <button type="submit" className="btn btn-primary" style={{ margin: '10px' }}>
-          Search
-        </button>
+        <div className="d-flex">
+          <button type="submit" className="btn btn-secondary text-dark" style={{ margin: '10px', display: 'flex', alignItems: 'center' }}>
+            <span className="material-icons" style={{ verticalAlign: 'middle' }}>
+              search
+            </span>
+            <span style={{ marginLeft: '5px' }}>Search</span>
+          </button>
 
-        <button type="button" className="btn btn-secondary" onClick={handleReset}>
-          Clear
-        </button>
+          <button type="button" className="btn btn-light" onClick={handleReset} style={{ margin: '10px', display: 'flex', alignItems: 'center' }}>
+          <span class="material-icons" style={{ verticalAlign: 'middle' }}>
+            clear_all
+          </span>
+            Clear
+          </button>
+        </div>
+
+
       </form>
     </div>
     <div className='container'> 
@@ -422,14 +445,28 @@ const activeButtonStyle = {
       <button style={favoritesData === false ? buttonStyle : activeButtonStyle} onClick={handleWishList}>Wishlist</button>
     </div>
     <div className='container'>
-      {!checkWishlist && navigationBar && <NavBar selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData} selectedItem={selectedItem} setSimilarProductsData={setSimilarProductsData}/>}
-      {!checkWishlist && !selectedItem && data && <Table data={data} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar} setFavoritesData={setFavoritesData} favoritesData={favoritesData} removeCartItem={removeCartItem}/>}
+    {showProgressBar && (
+      <div className="progress">
+        <div
+          className="progress-bar progress-bar-striped progress-bar-animated"
+          role="progressbar"
+          aria-valuenow={progress}
+          aria-valuemin="0"
+          aria-valuemax="100"
+          style={{ width: `${progress}%` }}
+        ></div>
+      </div>
+    )}
+    </div>
+    <div className='container'>
+      {!checkWishlist && navigationBar && <NavBar setWishListArray={setWishListArray} wishListArray = {wishListArray} favoritesData = {favoritesData} removeCartItem={removeCartItem} data = {data} itemId = {itemId} selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData} selectedItem={selectedItem} setSimilarProductsData={setSimilarProductsData}/>}
+      {!checkWishlist && !selectedItem && data && <Table wishListArray={wishListArray} setWishListArray={setWishListArray} data={data} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar} setFavoritesData={setFavoritesData} favoritesData={favoritesData} removeCartItem={removeCartItem}/>}
       {!checkWishlist && selectedItem && data && selectedNavItem === 'product' && <Item selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData}/>}
       {!checkWishlist && selectedItem && data && selectedNavItem === 'photos' && <Photos selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData = {setPhotosData} photosData={photosData}/>}
-      {!checkWishlist && selectedItem && data && selectedNavItem === 'shipping' && <Shipping itemId={itemId} data={data}/>}
+      {!checkWishlist && selectedItem && data && selectedNavItem === 'shipping' && <Shipping itemId={itemId} data={data} favoritesData={favoritesData}/>}
       {!checkWishlist && selectedItem && data && selectedNavItem === 'seller' && <Seller selectedItem={selectedItem}/>}
       {!checkWishlist && selectedItem && data && selectedNavItem === 'similar-products' && <SimilarProduct similarProductsData={similarProductsData}/>}
-      {checkWishlist && <WishList favoritesData={favoritesData} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar} setFavoritesData={setFavoritesData} removeCartItem={removeCartItem}/>}
+      {checkWishlist && <WishList setWishListArray={setWishListArray} wishListArray = {wishListArray} favoritesData={favoritesData} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar} setFavoritesData={setFavoritesData} removeCartItem={removeCartItem} setCheckWishlist={setCheckWishlist}/>}
     </div>
     </>
   );

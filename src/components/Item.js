@@ -50,9 +50,6 @@ const Item = (props) => {
 
     return (
         <div>
-            <div>
-                <h3 style={{alignItems:'center'}}>{props.selectedItem.Item.Title}</h3>
-            </div>
             {renderPictureModal()}
 
             

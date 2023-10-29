@@ -7,6 +7,8 @@ function WishListCard(props){
         // Define the URL for your backend endpoint to remove the item from the cart using a GET request
         const backendUrl = `http://localhost:5000/api/removeFromCart?itemId=${itemId}`;
         console.log('entering remove item');
+        const updatedList = props.wishListArray.filter(item => item !== itemId);
+        props.setWishListArray(updatedList);
         // Make a GET request to your backend to remove the item from the cart
         fetch(backendUrl)
           .then((response) => {
@@ -44,7 +46,7 @@ function WishListCard(props){
             props.setSelectedItem(data);
             props.setItemId(itemId);
             props.setNavigationBar(true);
-            props.setFavoritesData(false);
+            props.setCheckWishlist(false);
           })
           .catch((error) => {
             console.error('Error:', error);
@@ -58,7 +60,9 @@ function WishListCard(props){
             <td><p onClick={() => onProductNameClick(id)} style={{color:'blue'}}>{props.data.title}</p></td>
             <td>${props.data.price}</td>
             <td>{props.data.shippingOptions}</td>
-            <td><button onClick={() => onRemoveFromCartClick(id)}>Remove from cart</button></td>
+            <td><button onClick={() => onRemoveFromCartClick(id)}>
+              <span class="material-symbols-outlined">remove_shopping_cart</span>
+            </button></td>
         </tr>
     </>)
     

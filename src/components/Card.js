@@ -4,20 +4,30 @@ function Card(props){
     var id = props.data.itemId[0];
     //const id = props.data.itemId[0];
     const [isItemInCart, setIsItemInCart] = useState(false);
+    const [isItemInWishList, setIsItemInWishList] = useState(false);
 
-
-    const itemData = {
-        image: props.data.galleryURL[0],
-        title: props.data.title[0],
-        price: props.data.sellingStatus[0].currentPrice[0].__value__,
-        shippingOptions: props.data.shippingInfo[0].shippingType[0],
-        favoriteDetails: "Add any additional details here if needed",
-    };
+    useEffect(() => {
+      // Check if props.wishListArray is defined and not empty
+      if (props.wishListArray && props.wishListArray.length > 0) {
+          // Check if the item's id is in the wishListArray
+          const checkIsItemInWishList = props.wishListArray.some((item) => item === id);
+          setIsItemInWishList(checkIsItemInWishList)
+          
+          // Update isItemInCart based on whether the item is in the wish list
+          setIsItemInCart(isItemInWishList);
+      } else {
+          // If props.wishListArray is not defined or empty, set isItemInCart to false
+          setIsItemInCart(false);
+      }
+  }, [props.wishListArray, id]);
     
     const onRemoveFromCartClick = (itemId) => {
         // Define the URL for your backend endpoint to remove the item from the cart using a GET request
+        setIsItemInWishList(false);
         const backendUrl = `http://localhost:5000/api/removeFromCart?itemId=${itemId}`;
         console.log('entering remove item');
+        const updatedList = props.wishListArray.filter(item => item !== itemId);
+        props.setWishListArray(updatedList);
         // Make a GET request to your backend to remove the item from the cart
         fetch(backendUrl)
           .then((response) => {
@@ -37,6 +47,7 @@ function Card(props){
 
     const onAddToCartClick = () => {
         // Define the URL for your backend endpoint
+        props.setWishListArray(prevList => [...prevList, id]);
         console.log('printing props.favoriteData in card.js',props.favoritesData);
         props.data.title[0].replace('%', '%25');
         const ID = encodeURIComponent(id)
@@ -45,8 +56,11 @@ function Card(props){
         const price= encodeURIComponent(props.data.sellingStatus[0].currentPrice[0].__value__);
         const shippingOptions= encodeURIComponent(props.data.shippingInfo[0].shippingType[0]);
         const favoriteDetails= encodeURIComponent("Add any additional details here if needed");
+        const shippingInfo = JSON.stringify(props.data.shippingInfo[0]);
+        const shippingCost = JSON.stringify(props.data.shippingInfo[0].shippingServiceCost[0]);
+        //const shippingCostDisplay = shippingCost['@currencyId'] === 'USD' && shippingCost['__value__'] === '0.0' ? 'Free Shipping' : `${shippingCost['@currencyId']} ${shippingCost['__value__']}`;
 
-        const backendUrl = `http://localhost:5000/api/addToCart?itemId=${ID}&image=${image}&title=${title}&price=${price}&shippingOptions=${shippingOptions}&favoriteDetails=${favoriteDetails}`;
+        const backendUrl = `http://localhost:5000/api/addToCart?itemId=${ID}&image=${image}&title=${title}&price=${price}&shippingOptions=${shippingOptions}&favoriteDetails=${favoriteDetails}&shippingInfo=${shippingInfo}&shippingCost=${shippingCost}`;
         //props.setLocalFavoritesData(prevFavorites => [...prevFavorites, itemData]);
         //console.log('localFavoritesData in Card:', props.localFavoritesData);
     
@@ -112,10 +126,10 @@ function Card(props){
             <td>${props.data.sellingStatus[0].currentPrice[0].__value__}</td>
             <td>{props.data.shippingInfo[0].shippingType[0]}</td>
             <td>{props.data.postalCode[0]}</td>
-            <td>{isItemInCart ? (
-            <button onClick={() => onRemoveFromCartClick(id)}>Remove from cart</button>
+            <td>{isItemInCart||isItemInWishList ? (
+            <button onClick={() => onRemoveFromCartClick(id)}><span class="material-symbols-outlined">remove_shopping_cart</span></button>
           ) : (
-            <button onClick={onAddToCartClick}>Add to cart</button>
+            <button onClick={onAddToCartClick}><span class="material-symbols-outlined">add_shopping_cart</span></button>
           )}</td>
         </tr>
     </>)

@@ -1,7 +1,7 @@
 import React from "react";
 import WishListCard from "./WishListCard";
 
-function createEntries(cardTerm, i, setSelectedItem, setItemId, setNavigationBar, setFavoritesData, removeCartItem){
+function createEntries(cardTerm, i, setSelectedItem, setItemId, setNavigationBar, setFavoritesData, removeCartItem, setCheckWishlist, setWishListArray, wishListArray){
     return(<WishListCard
         data={cardTerm}
         keys={i}
@@ -11,6 +11,9 @@ function createEntries(cardTerm, i, setSelectedItem, setItemId, setNavigationBar
         setNavigationBar = {setNavigationBar}
         setFavoritesData = {setFavoritesData}
         removeCartItem = {removeCartItem}
+        setCheckWishlist = {setCheckWishlist}
+        setWishListArray = {setWishListArray}
+        wishListArray = {wishListArray}
         //setLocalFavoritesData = {setLocalFavoritesData}
     />);
 }
@@ -34,7 +37,7 @@ function WishList(props){
               </thead>
               <tbody>
                 {props.favoritesData.map((item, i) => {
-                  return createEntries(item, i + 1, props.setSelectedItem, props.setItemId, props.setNavigationBar, props.setFavoritesData, props.removeCartItem);
+                  return createEntries(item, i + 1, props.setSelectedItem, props.setItemId, props.setNavigationBar, props.setFavoritesData, props.removeCartItem, props.setCheckWishlist, props.setWishListArray, props.wishListArray);
                 })}
               </tbody>
         </table>
