@@ -31,6 +31,9 @@ function Form() {
   const [showProgressBar, setShowProgressBar] = useState(false);
   const [progress, setProgress] = useState(0);
   const [wishListArray, setWishListArray] = useState([]);
+  const [resultsActive, setResultsActive] = useState(true);
+  const [wishlistActive, setWishlistActive] = useState(false);
+  const [prevListState, setPrevListState] = useState('results')
 
 
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -171,6 +174,9 @@ function Form() {
 
   const handleWishList = () => {
     // Make an API request to retrieve data from the "favorites" collection
+    setPrevListState('wishlist');
+    setWishlistActive(true);
+    setResultsActive(false);
     fetch('http://localhost:5000/api/favorites')
       .then((response) => {
         if (!response.ok) {
@@ -216,6 +222,15 @@ const startProgressBar = () => {
   setProgress(50); // Set the progress to 50% immediately
   // You can continue with the rest of your code to make the API request
   // ...
+};
+
+const handleResultsClick = () => {
+  setPrevListState('results');
+  setResultsActive(true);
+  setWishlistActive(false);
+  setSelectedItem(false);
+  setCheckWishlist(false);
+  // Add your logic for handling the Results button click
 };
 
   return (
@@ -440,10 +455,22 @@ const startProgressBar = () => {
 
       </form>
     </div>
-    <div className='container'> 
-      <button style={favoritesData === false ? activeButtonStyle : buttonStyle} onClick={handleSubmit}>Results</button>
-      <button style={favoritesData === false ? buttonStyle : activeButtonStyle} onClick={handleWishList}>Wishlist</button>
-    </div>
+    <div className="container mb-3" style={{alignItems:'center', textAlign:"center"}}>
+        <button
+          className={`btn ${resultsActive ? 'btn-dark' : 'btn-light'}`}
+          onClick={handleResultsClick}
+          style={{alignItems:'center', textAlign:"center", marginRight:"10px"}}
+        >
+          Results
+        </button>
+        <button
+          className={`btn ${wishlistActive ? 'btn-dark' : 'btn-light'}`}
+          onClick={handleWishList}
+          style={{alignItems:'center', textAlign:"center"}}
+        >
+          Wishlist
+        </button>
+      </div>
     <div className='container'>
     {showProgressBar && (
       <div className="progress">
@@ -459,7 +486,7 @@ const startProgressBar = () => {
     )}
     </div>
     <div className='container'>
-      {!checkWishlist && navigationBar && <NavBar setWishListArray={setWishListArray} wishListArray = {wishListArray} favoritesData = {favoritesData} removeCartItem={removeCartItem} data = {data} itemId = {itemId} selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData} selectedItem={selectedItem} setSimilarProductsData={setSimilarProductsData}/>}
+      {!checkWishlist && selectedItem && navigationBar && <NavBar handleWishList={handleWishList} prevListState={prevListState} handleResultsClick={handleResultsClick} setCheckWishlist={setCheckWishlist} setSelectedItem={selectedItem} setWishListArray={setWishListArray} wishListArray = {wishListArray} favoritesData = {favoritesData} removeCartItem={removeCartItem} data = {data} itemId = {itemId} selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData} selectedItem={selectedItem} setSimilarProductsData={setSimilarProductsData}/>}
       {!checkWishlist && !selectedItem && data && <Table wishListArray={wishListArray} setWishListArray={setWishListArray} data={data} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar} setFavoritesData={setFavoritesData} favoritesData={favoritesData} removeCartItem={removeCartItem}/>}
       {!checkWishlist && selectedItem && data && selectedNavItem === 'product' && <Item selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData}/>}
       {!checkWishlist && selectedItem && data && selectedNavItem === 'photos' && <Photos selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData = {setPhotosData} photosData={photosData}/>}

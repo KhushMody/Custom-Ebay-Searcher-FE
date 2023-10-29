@@ -30,9 +30,11 @@ function Photos(props){
                     <div key={columnIndex} className="col-md-4">
                         <div className="column">
                             {column.map((item, itemIndex) => (
-                                <div key={itemIndex} className="photo-item">
+                                <div key={itemIndex} className="photo-item mb-3">
                                     <a href={item.link} target="_blank" rel="noopener noreferrer">
-                                        <img src={item.link} alt={item.title} height={'auto'} width={'200px'}/>
+                                        <img src={item.link} alt={item.title} height={'auto'} width={'200px'} style={{
+                        border: '8px solid black', // Add the black border
+                      }}/>
                                     </a>
                                 </div>
                             ))}

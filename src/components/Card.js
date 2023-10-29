@@ -127,9 +127,9 @@ function Card(props){
             <td>{props.data.shippingInfo[0].shippingType[0]}</td>
             <td>{props.data.postalCode[0]}</td>
             <td>{isItemInCart||isItemInWishList ? (
-            <button onClick={() => onRemoveFromCartClick(id)}><span class="material-symbols-outlined">remove_shopping_cart</span></button>
+            <button className="btn btn-light"  onClick={() => onRemoveFromCartClick(id)} style={{color:"#966919"}}><span class="material-symbols-outlined">remove_shopping_cart</span></button>
           ) : (
-            <button onClick={onAddToCartClick}><span class="material-symbols-outlined">add_shopping_cart</span></button>
+            <button className="btn btn-light" onClick={onAddToCartClick} ><span class="material-symbols-outlined">add_shopping_cart</span></button>
           )}</td>
         </tr>
     </>)

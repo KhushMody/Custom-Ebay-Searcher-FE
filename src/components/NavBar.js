@@ -175,12 +175,29 @@ function NavBar(props){
         <>
             <div className="container mb-3">
                 <h4 style={{alignItems:'center', textAlign:"center"}} className="mb-3">{props.selectedItem.Item.Title}</h4>
-                <div>
-                    {isItemInCart||isItemInWishList ? (
-                        <button onClick={() => onRemoveFromCartClick(id)}><span class="material-symbols-outlined">remove_shopping_cart</span></button>
-                    ) : (
-                        <button onClick={onAddToCartClick}><span class="material-symbols-outlined">add_shopping_cart</span></button>
-                    )}
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-6 text-start">
+                        {props.prevListState === 'results' ? (<button
+                            className={`btn btn-light`}
+                            onClick={props.handleResultsClick}
+                        >
+                            List
+                        </button>):(<button
+                            className={`btn btn-light`}
+                            onClick={props.handleWishList}
+                        >
+                            List
+                        </button>)}
+                        </div>
+                        <div className="col-md-6 text-end">
+                            {isItemInCart || isItemInWishList ? (
+                                <button className="btn btn-light"  onClick={() => onRemoveFromCartClick(id)} style={{color:"#966919"}}><span class="material-symbols-outlined">remove_shopping_cart</span></button>
+                            ) : (
+                                <button className="btn btn-light" onClick={onAddToCartClick} ><span class="material-symbols-outlined">add_shopping_cart</span></button>
+                            )}
+                        </div>
+                    </div>
                 </div>
                 <ul style={navListStyle}>
                     <li

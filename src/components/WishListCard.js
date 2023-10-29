@@ -60,7 +60,7 @@ function WishListCard(props){
             <td><p onClick={() => onProductNameClick(id)} style={{color:'blue'}}>{props.data.title}</p></td>
             <td>${props.data.price}</td>
             <td>{props.data.shippingOptions}</td>
-            <td><button onClick={() => onRemoveFromCartClick(id)}>
+            <td><button className="btn btn-light" style={{color:"#966919"}} onClick={() => onRemoveFromCartClick(id)}>
               <span class="material-symbols-outlined">remove_shopping_cart</span>
             </button></td>
         </tr>
