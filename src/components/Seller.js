@@ -11,7 +11,7 @@ function Seller(props) {
         <table className="table table-striped table-dark">
             <thead>
                 {storeInfo && storeInfo.StoreName && (
-                    <tr>
+                    <tr style={{textAlign:"center"}}>
                         <th colspan="100%">{storeInfo.StoreName}</th>
                     </tr>
                 )}
@@ -32,6 +32,9 @@ function Seller(props) {
                                     text: {
                                         fill: "white",
                                         fontSize: "35px",
+                                    },
+                                    path:{
+                                        stroke:"green"
                                     }
                                 }}/>
                             </div>
@@ -41,13 +44,19 @@ function Seller(props) {
                 {sellerInfo.FeedbackRatingStar && (
                     <tr>
                         <th scope="row">Feedback Rating Star</th>
-                        <td><i class="material-icons" style={{ color: `${sellerInfo.FeedbackRatingStar}` }}>star_border</i></td>
+                        <td>
+                            {sellerInfo.FeedbackScore >= 10000 ? (
+                                <i className="material-icons" style={{ color: `${sellerInfo.FeedbackRatingStar}` }}>stars</i>
+                            ) : (
+                                <i className="material-icons" style={{ color: `${sellerInfo.FeedbackRatingStar}` }}>star_border</i>
+                            )}
+                        </td>
                     </tr>
                 )}
                 {sellerInfo.TopRatedSeller && (
                     <tr>
                         <th scope="row">Top Rated</th>
-                        <td>{sellerInfo.TopRatedSeller}</td>
+                        <td>{sellerInfo.TopRatedSeller === true ? (<span class="material-symbols-outlined" style={{color:"green"}}>done</span>):(<span class="material-symbols-outlined" style={{color:"red"}}>close</span>)}</td>
                     </tr>
                 )}
                 {storeInfo && storeInfo.StoreName && (
@@ -59,7 +68,7 @@ function Seller(props) {
                 {storeInfo && storeInfo.StoreURL && (
                     <tr>
                         <th scope="row">Buy Product At</th>
-                        <td><a href={storeInfo.StoreURL}>Store</a></td>
+                        <td><a href={storeInfo.StoreURL} target="_blank">Store</a></td>
                     </tr>
                 )}
             </tbody>

@@ -60,29 +60,31 @@ function Table(props) {
                 })}
               </tbody>
             </table>
-  
-            <div className="pagination">
-              <button
-                onClick={() => setCurrentPage(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                Previous
-              </button>
-              {pageNumbers.map((page) => (
+            <div style={{display:"flex", justifyContent:"center", alignItems:'center', textAlign:"center"}}>
+              <div className="pagination" style={{alignItems:'center', textAlign:"center"}}>
                 <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`btn ${currentPage === page ? "btn-primary" : "btn-secondary"}`}
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
                 >
-                  {page}
+                  Previous
                 </button>
-              ))}
-              <button
-                onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </button>
+                {pageNumbers.map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`btn ${currentPage === page ? "btn-primary" : "btn-light"}`}
+                    style={{ borderRadius: "0" }}
+                  >
+                    {page}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </>
         )}

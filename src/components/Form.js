@@ -234,7 +234,7 @@ const handleResultsClick = () => {
 };
 
   return (
-    <>
+    <div className="container">
     <div className="container bg-dark text-white" >
         <h1 className='mb-3 offset-md-3'>Product Search</h1>
       <form onSubmit={handleSubmit} className='mb-3 offset-md-3' noValidate>
@@ -495,7 +495,7 @@ const handleResultsClick = () => {
       {!checkWishlist && selectedItem && data && selectedNavItem === 'similar-products' && <SimilarProduct similarProductsData={similarProductsData}/>}
       {checkWishlist && <WishList setWishListArray={setWishListArray} wishListArray = {wishListArray} favoritesData={favoritesData} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar} setFavoritesData={setFavoritesData} removeCartItem={removeCartItem} setCheckWishlist={setCheckWishlist}/>}
     </div>
-    </>
+    </div>
   );
 }
 

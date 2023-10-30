@@ -9,6 +9,16 @@ function NavBar(props){
     console.log('wishListArray in navBar', props.wishListArray);
     //var isItemInWishList;
 
+    const facebookShare = () => {
+        console.log('CLICKED')
+        const shareUrl = item.viewItemURL[0];
+        const PRICE= item.sellingStatus[0].currentPrice[0].__value__;
+        const PRODUCT_NAME = item.title[0];
+        const quote = `Buy ${PRODUCT_NAME} at ${PRICE} from ${shareUrl} below.`;
+        const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(quote)}`;
+        window.open(facebookShareUrl, '_blank');
+    };
+
     useEffect(() => {
         // Check if props.wishListArray is defined and not empty
         if (props.wishListArray && props.wishListArray.length > 0) {
@@ -160,7 +170,7 @@ function NavBar(props){
         color: 'white',
         padding: '10px 20px',
         cursor: 'pointer',
-        borderRadius: '10px 10px 0 0',
+        borderRadius: '5px 5px 0 0',
     };
     
     const navListStyle = {
@@ -191,12 +201,22 @@ function NavBar(props){
                         </button>)}
                         </div>
                         <div className="col-md-6 text-end">
-                            {isItemInCart || isItemInWishList ? (
-                                <button className="btn btn-light"  onClick={() => onRemoveFromCartClick(id)} style={{color:"#966919"}}><span class="material-symbols-outlined">remove_shopping_cart</span></button>
-                            ) : (
-                                <button className="btn btn-light" onClick={onAddToCartClick} ><span class="material-symbols-outlined">add_shopping_cart</span></button>
-                            )}
+                            <div className="d-flex justify-content-end">
+                                <div onClick={facebookShare}>
+                                <img src="./facebook.png" alt="facebook logo" style={{ height: "42px", width: "auto" }} />
+                                </div>
+                                {isItemInCart || isItemInWishList ? (
+                                <button className="btn btn-light" onClick={() => onRemoveFromCartClick(id)} style={{ color: "#966919" }}>
+                                    <span class="material-symbols-outlined">remove_shopping_cart</span>
+                                </button>
+                                ) : (
+                                <button className="btn btn-light" onClick={onAddToCartClick}>
+                                    <span class="material-symbols-outlined">add_shopping_cart</span>
+                                </button>
+                                )}
+                            </div>
                         </div>
+
                     </div>
                 </div>
                 <ul style={navListStyle}>

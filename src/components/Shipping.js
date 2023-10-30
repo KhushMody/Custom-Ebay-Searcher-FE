@@ -4,7 +4,7 @@ function Shipping(props) {
     console.log(props.itemId);
     const dataEntries = props.data;
     console.log(dataEntries);
-    console.log(props.favoritesData.find(item => item.itemId === props.itemId));
+    //console.log(props.favoritesData.find(item => item.itemId === props.itemId));
     
     // Check if dataEntries is undefined and use props.favoritesData as a fallback
     const selectedItemFromData = dataEntries
@@ -61,19 +61,19 @@ function Shipping(props) {
                     {shippingInfo.expeditedShipping && (
                         <tr>
                             <th scope="row">Expedited Shipping</th>
-                            <td>{shippingInfo.expeditedShipping[0]}</td>
+                            <td>{shippingInfo.expeditedShipping[0] === 'true' ? (<span class="material-symbols-outlined" style={{color:"green"}}>done</span>):(<span class="material-symbols-outlined" style={{color:"red"}}>close</span>)}</td>
                         </tr>
                     )}
                     {shippingInfo.oneDayShippingAvailable && (
                         <tr>
                             <th scope="row">One-Day Shipping Available</th>
-                            <td>{shippingInfo.oneDayShippingAvailable[0]}</td>
+                            <td>{shippingInfo.oneDayShippingAvailable[0] === 'true' ? (<span class="material-symbols-outlined" style={{color:"green"}}>done</span>):(<span class="material-symbols-outlined" style={{color:"red"}}>close</span>)}</td>
                         </tr>
                     )}
                     {selectedItem.returnsAccepted && (
                         <tr>
                             <th scope="row">Returns Accepted</th>
-                            <td>{selectedItem.returnsAccepted[0]}</td>
+                            <td>{selectedItem.returnsAccepted[0] === 'true' ? (<span class="material-symbols-outlined" style={{color:"green"}}>done</span>):(<span class="material-symbols-outlined" style={{color:"red"}}>close</span>)}</td>
                         </tr>
                     )}
                 </tbody>
