@@ -110,6 +110,7 @@ function Card(props){
             props.setSelectedItem(data);
             props.setItemId(itemId);
             props.setNavigationBar(true);
+            props.setDetailsButton(true);
           })
           .catch((error) => {
             console.error('Error:', error);
@@ -117,11 +118,24 @@ function Card(props){
       };
 
     return(<>
-        <tr>
+        <tr className={props.itemId === id ? "table-light" : ""}>
             <td>{props.keys}</td>
-            <td><img src={props.data.galleryURL[0]} style={{height:'100px', width:'100px'}} alt="item"/></td>
+            <td><a href={props.data.galleryURL[0]} target="_blank" rel="noopener noreferrer"><img src={props.data.galleryURL[0]} style={{height:'100px', width:'100px'}} alt="item"/></a></td>
             <td>
-                <p onClick={() => onProductNameClick(id)} style={{color:'blue'}}>{props.data.title[0]}</p>
+              <p
+                onClick={() => onProductNameClick(id)}
+                style={{ color: 'blue' }}
+                title={props.data.title[0]}
+              >
+                {props.data.title[0].length > 45 ? (() => {
+                  const truncated = props.data.title[0].slice(0, 45);
+                  if (truncated.charAt(45) !== ' ' && truncated.lastIndexOf(' ') > 0) {
+                    const lastSpaceIndex = truncated.lastIndexOf(' ');
+                    return `${truncated.slice(0, lastSpaceIndex)}...`;
+                  }
+                  return `${truncated}...`;
+                })() : props.data.title[0]}
+              </p>
             </td>
             <td>${props.data.sellingStatus[0].currentPrice[0].__value__}</td>
             <td>{props.data.shippingInfo[0].shippingType[0]}</td>

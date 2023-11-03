@@ -1,7 +1,7 @@
 import React from "react";
 import WishListCard from "./WishListCard";
 
-function createEntries(cardTerm, i, setSelectedItem, setItemId, setNavigationBar, setFavoritesData, removeCartItem, setCheckWishlist, setWishListArray, wishListArray){
+function createEntries(cardTerm, i, setSelectedItem, setItemId, setNavigationBar, setFavoritesData, removeCartItem, setCheckWishlist, setWishListArray, wishListArray, itemId){
     return(<WishListCard
         data={cardTerm}
         keys={i}
@@ -14,6 +14,7 @@ function createEntries(cardTerm, i, setSelectedItem, setItemId, setNavigationBar
         setCheckWishlist = {setCheckWishlist}
         setWishListArray = {setWishListArray}
         wishListArray = {wishListArray}
+        itemId = {itemId}
         //setLocalFavoritesData = {setLocalFavoritesData}
     />);
 }
@@ -24,6 +25,7 @@ function WishList(props){
     //const item = props.favoritesData[0];
     //var i=0;
     return(
+      <div className="table-responsive">
         <table className="table table-striped table-dark">
               <thead>
                 <tr>
@@ -37,10 +39,11 @@ function WishList(props){
               </thead>
               <tbody>
                 {props.favoritesData.map((item, i) => {
-                  return createEntries(item, i + 1, props.setSelectedItem, props.setItemId, props.setNavigationBar, props.setFavoritesData, props.removeCartItem, props.setCheckWishlist, props.setWishListArray, props.wishListArray);
+                  return createEntries(item, i + 1, props.setSelectedItem, props.setItemId, props.setNavigationBar, props.setFavoritesData, props.removeCartItem, props.setCheckWishlist, props.setWishListArray, props.wishListArray, props.itemId);
                 })}
               </tbody>
         </table>
+      </div>
     );
 };
 

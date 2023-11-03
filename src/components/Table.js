@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from "react";
 import Card from "./Card";
 
-function createEntries(cardTerm, i, setSelectedItem, setItemId, setNavigationBar, setFavoritesData, favoritesData, removeCartItem, wishListArray, setWishListArray){
+function createEntries(cardTerm, i, setSelectedItem, setItemId, setNavigationBar, setFavoritesData, favoritesData, removeCartItem, wishListArray, setWishListArray, setDetailsButton, itemId){
     return(<Card
         data={cardTerm}
         keys={i}
@@ -14,6 +14,8 @@ function createEntries(cardTerm, i, setSelectedItem, setItemId, setNavigationBar
         removeCartItem = {removeCartItem}
         setWishListArray = {setWishListArray}
         wishListArray = {wishListArray}
+        setDetailsButton = {setDetailsButton}
+        itemId = {itemId}
     />);
 }
 
@@ -39,58 +41,61 @@ function Table(props) {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = currentPage * itemsPerPage;
     return (
-      <>
-        {totalCount > 0 && (
-          <>
-            <table className="table table-striped table-dark">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Image</th>
-                  <th scope="col">Title</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Shipping</th>
-                  <th scope="col">Zip</th>
-                  <th scope="col">Wish List</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dataEntries[0]["item"].slice(startIndex, endIndex).map((item, i) => {
-                  return createEntries(item, i + 1 + startIndex, props.setSelectedItem, props.setItemId, props.setNavigationBar, props.setFavoritesData, props.favoritesData, props.removeCartItem, props.wishListArray, props.setWishListArray);
-                })}
-              </tbody>
-            </table>
-            <div style={{display:"flex", justifyContent:"center", alignItems:'center', textAlign:"center"}}>
-              <div className="pagination" style={{alignItems:'center', textAlign:"center"}}>
-                <button
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </button>
-                {pageNumbers.map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`btn ${currentPage === page ? "btn-primary" : "btn-light"}`}
-                    style={{ borderRadius: "0" }}
-                  >
-                    {page}
-                  </button>
-                ))}
-                <button
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          </>
-        )}
-        {totalCount === 0 && <h1>No content received from the server</h1>}
-        {/* {currentTable === ''} */}
-      </>
+      <div className="container">
+  {totalCount > 0 && (
+    <>
+      <div className="table-responsive">
+        <table className="table table-striped table-dark">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Image</th>
+              <th scope="col">Title</th>
+              <th scope="col">Price</th>
+              <th scope="col">Shipping</th>
+              <th scope="col">Zip</th>
+              <th scope="col">Wish List</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dataEntries[0]["item"].slice(startIndex, endIndex).map((item, i) => {
+              return createEntries(item, i + 1 + startIndex, props.setSelectedItem, props.setItemId, props.setNavigationBar, props.setFavoritesData, props.favoritesData, props.removeCartItem, props.wishListArray, props.setWishListArray, props.setDetailsButton, props.itemId);
+            })}
+          </tbody>
+        </table>
+      </div>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+        <div className="pagination" style={{ alignItems: "center", textAlign: "center" }}>
+          <button
+            onClick={() => setCurrentPage(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          {pageNumbers.map((page) => (
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`btn ${currentPage === page ? "btn-primary" : "btn-light"}`}
+              style={{ borderRadius: "0" }}
+            >
+              {page}
+            </button>
+          ))}
+          <button
+            onClick={() => setCurrentPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </>
+  )}
+  {totalCount === 0 && <h1>No content received from the server</h1>}
+  {/* {currentTable === ''} */}
+</div>
+
     );
 }
 

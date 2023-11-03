@@ -19,15 +19,20 @@ function Seller(props) {
             <tbody>
                 {sellerInfo.FeedbackScore && (
                     <tr>
-                        <th scope="row">Feedback Score</th>
-                        <td>{sellerInfo.FeedbackScore}</td>
+                        <div className='container'>
+                            <div className='row'>
+                                <div className='col-sm-12 col-lg-6 fw-bolder'>Feedback Score</div>
+                                <div className='col-sm-12 col-lg-6'>{sellerInfo.FeedbackScore}</div>
+                            </div>
+                        </div>
                     </tr>
                 )}
                 {sellerInfo.PositiveFeedbackPercent && (
                     <tr>
-                        <th scope="row">Popularity</th>
-                        <td>
-                            <div style={{ width: '30px', height: '30px' }}>
+                        <div className='container'>
+                            <div className='row'>
+                                <div className='col-sm-12 col-lg-6 fw-bolder'>Popularity</div>
+                                <div className='col-sm-12 col-lg-6'><div style={{ width: '30px', height: '30px' }}>
                                 <CircularProgressbar value={sellerInfo.PositiveFeedbackPercent} text={`${sellerInfo.PositiveFeedbackPercent}`} styles={{
                                     text: {
                                         fill: "white",
@@ -37,38 +42,53 @@ function Seller(props) {
                                         stroke:"green"
                                     }
                                 }}/>
+                            </div></div>
                             </div>
-                        </td>
+                        </div>
                     </tr>
                 )}
                 {sellerInfo.FeedbackRatingStar && (
                     <tr>
-                        <th scope="row">Feedback Rating Star</th>
-                        <td>
-                            {sellerInfo.FeedbackScore >= 10000 ? (
+                        <div className='container'>
+                            <div className='row'>
+                                <div className='col-sm-12 col-lg-6 fw-bolder'>Feedback Rating Star</div>
+                                <div className='col-sm-12 col-lg-6'>{sellerInfo.FeedbackScore >= 10000 ? (
                                 <i className="material-icons" style={{ color: `${sellerInfo.FeedbackRatingStar}` }}>stars</i>
                             ) : (
                                 <i className="material-icons" style={{ color: `${sellerInfo.FeedbackRatingStar}` }}>star_border</i>
-                            )}
-                        </td>
+                            )}</div>
+                            </div>
+                        </div>
                     </tr>
                 )}
                 {sellerInfo.TopRatedSeller && (
                     <tr>
-                        <th scope="row">Top Rated</th>
-                        <td>{sellerInfo.TopRatedSeller === true ? (<span class="material-symbols-outlined" style={{color:"green"}}>done</span>):(<span class="material-symbols-outlined" style={{color:"red"}}>close</span>)}</td>
+                        <div className='container'>
+                            <div className='row'>
+                                <div className='col-sm-12 col-lg-6 fw-bolder'>Top Rated</div>
+                                <div className='col-sm-12 col-lg-6'>{sellerInfo.TopRatedSeller === true ? (<span class="material-symbols-outlined" style={{color:"green"}}>done</span>):(<span class="material-symbols-outlined" style={{color:"red"}}>close</span>)}</div>
+                            </div>
+                        </div>
                     </tr>
                 )}
                 {storeInfo && storeInfo.StoreName && (
                     <tr>
-                        <th scope="row">Store Name</th>
-                        <td>{storeInfo.StoreName}</td>
+                        <div className='container'>
+                            <div className='row'>
+                                <div className='col-sm-12 col-lg-6 fw-bolder'>Store Name</div>
+                                <div className='col-sm-12 col-lg-6'>{storeInfo.StoreName}</div>
+                            </div>
+                        </div>
                     </tr>
                 )}
                 {storeInfo && storeInfo.StoreURL && (
                     <tr>
-                        <th scope="row">Buy Product At</th>
-                        <td><a href={storeInfo.StoreURL} target="_blank">Store</a></td>
+                        <div className='container'>
+                            <div className='row'>
+                                <div className='col-sm-12 col-lg-6 fw-bolder'>Buy Product At</div>
+                                <div className='col-sm-12 col-lg-6'><a href={storeInfo.StoreURL} target="_blank">Store</a></div>
+                            </div>
+                        </div>
                     </tr>
                 )}
             </tbody>

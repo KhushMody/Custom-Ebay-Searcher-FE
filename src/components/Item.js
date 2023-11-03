@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Navbar } from 'react-bootstrap';
+//import { Modal, Button, Navbar } from 'react-bootstrap';
+import { Modal, Button, Carousel } from 'react-bootstrap';
+import '../style/item.css'
+
 import NavBar from './NavBar';
 
 const Item = (props) => {
@@ -11,15 +14,19 @@ const Item = (props) => {
     const handleShow = () => setShowModal(true);
 
     useEffect(()=>{
-        console.log('logging props.selectedItem',props.selectedItem);
+        console.log('logging props.selectedItem',props.selectedItem.Item.PictureURL);
     }, []);
 
     const renderNameValueList = () => {
         if (props.selectedItem.Item.ItemSpecifics && props.selectedItem.Item.ItemSpecifics.NameValueList) {
             return props.selectedItem.Item.ItemSpecifics.NameValueList.map((item, index) => (
                 <tr key={index}>
-                    <th scope="row">{item.Name}</th>
-                    <td>{Array.isArray(item.Value) ? item.Value.join(', ') : item.Value}</td>
+                        <div className='container'>
+                            <div className='row'>
+                                <div className='col-sm-12 col-lg-2 fw-bolder'>{item.Name}</div>
+                                <div className='col-sm-12 col-lg-10'>{Array.isArray(item.Value) ? item.Value.join(', ') : item.Value}</div>
+                            </div>
+                        </div>
                 </tr>
             ));
         }
@@ -27,54 +34,74 @@ const Item = (props) => {
 
     const renderPictureModal = () => {
         return (
-            <Modal show={showModal} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>PictureURL</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <div>
-                        {props.selectedItem.Item.PictureURL.map((url, index) => (
-                            <img key={index} src={url} alt={`Picture ${index}`} style={{ width: '100%' }} />
-                        ))}
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+          <Modal show={showModal} onHide={handleClose} dialogClassName="image-modal">
+            <Modal.Header closeButton>
+              <Modal.Title>PictureURL</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <Carousel interval={null} className="custom-carousel">
+                {props.selectedItem.Item.PictureURL.map((url, index) => (
+                    <Carousel.Item key={index} className="p-0">
+                    <img src={url} alt={`Picture ${index}`} style={{ width: '100%' }} />
+                    </Carousel.Item>
+                ))}
+            </Carousel>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
         );
-    };
+      };
+      
 
 
     return (
         <div>
+            
+
             {renderPictureModal()}
 
             
             <table class="table table-striped table-dark">
                 <tbody>
                     <tr>
-                        <th scope="row">Product Images</th>
-                        <td>
-                            <p onClick={handleShow} style={{color:'blue'}}>
-                                    View Pictures
-                            </p>
-                        </td>
-                        
+                        <div className='container'>
+                            <div className='row'>
+                                <div className='col-sm-12 col-lg-2 fw-bolder'>Product Images</div>
+                                <div className='col-sm-12 col-lg-10'>
+                                    <p onClick={handleShow} style={{color:'blue'}}>
+                                            View Pictures
+                                    </p>
+                                </div>
+                            </div>
+                        </div> 
                     </tr>
                     <tr>
-                        <th scope="row">Price</th>
-                        <td>${props.selectedItem.Item.CurrentPrice.Value}</td>
+                        <div className='container'>
+                            <div className='row'>
+                                <div className='col-sm-12 col-lg-2 fw-bolder'>Price</div>
+                                <div className='col-sm-12 col-lg-10'>${props.selectedItem.Item.CurrentPrice.Value}</div>
+                            </div>
+                        </div>
                     </tr>
                     <tr>
-                        <th scope="row">Location</th>
-                        <td>{props.selectedItem.Item.Location}</td>
+                        <div className='container'>
+                            <div className='row'>
+                                <div className='col-sm-12 col-lg-2 fw-bolder'>Location</div>
+                                <div className='col-sm-12 col-lg-10'>{props.selectedItem.Item.Location}</div>
+                            </div>
+                        </div>
                     </tr>
                     <tr>
-                        <th scope="row">Return Policy</th>
-                        <td>{props.selectedItem.Item.ReturnPolicy.ReturnsAccepted} within {props.selectedItem.Item.ReturnPolicy.ReturnsWithin}</td>
+                        <div className='container'>
+                            <div className='row'>
+                                <div className='col-sm-12 col-lg-2 fw-bolder'>Return Policy</div>
+                                <div className='col-sm-12 col-lg-10'>{props.selectedItem.Item.ReturnPolicy.ReturnsAccepted} within {props.selectedItem.Item.ReturnPolicy.ReturnsWithin}</div>
+                            </div>
+                        </div>
                     </tr>
                     {renderNameValueList()}
                 </tbody>

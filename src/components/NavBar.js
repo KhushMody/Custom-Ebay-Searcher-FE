@@ -185,9 +185,9 @@ function NavBar(props){
         <>
             <div className="container mb-3">
                 <h4 style={{alignItems:'center', textAlign:"center"}} className="mb-3">{props.selectedItem.Item.Title}</h4>
-                <div className="container">
+                <div>
                     <div className="row">
-                        <div className="col-md-6 text-start">
+                        <div className="col-6 col-md-6 text-start">
                         {props.prevListState === 'results' ? (<button
                             className={`btn btn-light`}
                             onClick={props.handleResultsClick}
@@ -200,7 +200,7 @@ function NavBar(props){
                             List
                         </button>)}
                         </div>
-                        <div className="col-md-6 text-end">
+                        <div className="col-6 col-md-6 text-end">
                             <div className="d-flex justify-content-end">
                                 <div onClick={facebookShare}>
                                 <img src="./facebook.png" alt="facebook logo" style={{ height: "42px", width: "auto" }} />
@@ -219,39 +219,42 @@ function NavBar(props){
 
                     </div>
                 </div>
-                <ul style={navListStyle}>
-                    <li
-                        onClick={() => handleNavItemClick('product')}
-                        style={props.selectedNavItem === 'product' ? activeNavItemStyle : navItemStyle}
-                    >
-                        Product
-                    </li>
-                    <li
-                        onClick={() => handleNavItemClickPhotos('photos')}
-                        style={props.selectedNavItem === 'photos' ? activeNavItemStyle : navItemStyle}
-                    >
-                        Photos
-                    </li>
-                    <li
-                        onClick={() => handleNavItemClick('shipping')}
-                        style={props.selectedNavItem === 'shipping' ? activeNavItemStyle : navItemStyle}
-                    >
-                        Shipping
-                    </li>
-                    <li
-                        onClick={() => handleNavItemClick('seller')}
-                        style={props.selectedNavItem === 'seller' ? activeNavItemStyle : navItemStyle}
-                    >
-                        Seller
-                    </li>
-                    <li
-                        onClick={() => handleNavItemClickSimilarProducts('similar-products')}
-                        style={props.selectedNavItem === 'similar-products' ? activeNavItemStyle : navItemStyle}
-                    >
-                        Similar Products
-                    </li>
-                </ul>
-                <hr style={{marginTop:'0', paddingTop:'0'}}></hr>
+                <div className="col-12">
+                    <ul className="nav nav-tabs" style={navListStyle}>
+                        <li
+                            onClick={() => handleNavItemClick('product')}
+                            style={props.selectedNavItem === 'product' ? activeNavItemStyle : navItemStyle}
+                        >
+                            Product
+                        </li>
+                        <li
+                            onClick={() => handleNavItemClickPhotos('photos')}
+                            style={props.selectedNavItem === 'photos' ? activeNavItemStyle : navItemStyle}
+                        >
+                            Photos
+                        </li>
+                        <li
+                            onClick={() => handleNavItemClick('shipping')}
+                            style={props.selectedNavItem === 'shipping' ? activeNavItemStyle : navItemStyle}
+                        >
+                            Shipping
+                        </li>
+                        <li
+                            onClick={() => handleNavItemClick('seller')}
+                            style={props.selectedNavItem === 'seller' ? activeNavItemStyle : navItemStyle}
+                        >
+                            Seller
+                        </li>
+                        <li
+                            onClick={() => handleNavItemClickSimilarProducts('similar-products')}
+                            style={props.selectedNavItem === 'similar-products' ? activeNavItemStyle : navItemStyle}
+                        >
+                            Similar Products
+                        </li>
+                    </ul>
+                    <hr style={{marginTop:'0', paddingTop:'0'}}></hr>
+                </div>
+                
             </div>
             
         </>

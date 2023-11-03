@@ -32,7 +32,7 @@ function Photos(props){
                             {column.map((item, itemIndex) => (
                                 <div key={itemIndex} className="photo-item mb-3">
                                     <a href={item.link} target="_blank" rel="noopener noreferrer">
-                                        <img src={item.link} alt={item.title} height={'auto'} width={'200px'} style={{
+                                        <img src={item.link} alt={item.title} className="img-fluid" style={{
                         border: '8px solid black', // Add the black border
                       }}/>
                                     </a>

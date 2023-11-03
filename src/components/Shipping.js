@@ -41,39 +41,63 @@ function Shipping(props) {
                 <tbody>
                     {shippingInfo.shippingServiceCost && (
                         <tr>
-                            <th scope="row">Shipping Cost</th>
-                            <td>{shippingCostDisplay}</td>
+                            <div className="container">
+                                <div className="row">
+                                    <div className='col-sm-12 col-lg-6 fw-bolder'>Shipping Cost</div>
+                                    <div className='col-sm-12 col-lg-6'>{shippingCostDisplay}</div>
+                                </div>
+                            </div>
                         </tr>
                     )}
 
                     {shippingInfo.shipToLocations && (
                         <tr>
-                            <th scope="row">Shipping Locations</th>
-                            <td>{shippingInfo.shipToLocations[0]}</td>
+                            <div className="container">
+                                <div className="row">
+                                    <div className='col-sm-12 col-lg-6 fw-bolder'>Shipping Locations</div>
+                                    <div className='col-sm-12 col-lg-6'>{shippingInfo.shipToLocations[0]}</div>
+                                </div>
+                            </div>
                         </tr>
                     )}
                     {shippingInfo.handlingTime && (
                         <tr>
-                            <th scope="row">Handling Time</th>
-                            <td>{shippingInfo.handlingTime[0]} Day</td>
+                            <div className="container">
+                                <div className="row">
+                                    <div className='col-sm-12 col-lg-6 fw-bolder'>Handling Time</div>
+                                    <div className='col-sm-12 col-lg-6'>{shippingInfo.handlingTime[0]} Day</div>
+                                </div>
+                            </div>
                         </tr>
                     )}
                     {shippingInfo.expeditedShipping && (
                         <tr>
-                            <th scope="row">Expedited Shipping</th>
-                            <td>{shippingInfo.expeditedShipping[0] === 'true' ? (<span class="material-symbols-outlined" style={{color:"green"}}>done</span>):(<span class="material-symbols-outlined" style={{color:"red"}}>close</span>)}</td>
+                            <div className="container">
+                                <div className="row">
+                                    <div className='col-sm-12 col-lg-6 fw-bolder'>Expedited Shipping</div>
+                                    <div className='col-sm-12 col-lg-6'>{shippingInfo.expeditedShipping[0] === 'true' ? (<span class="material-symbols-outlined" style={{color:"green"}}>done</span>):(<span class="material-symbols-outlined" style={{color:"red"}}>close</span>)}</div>
+                                </div>
+                            </div>
                         </tr>
                     )}
                     {shippingInfo.oneDayShippingAvailable && (
                         <tr>
-                            <th scope="row">One-Day Shipping Available</th>
-                            <td>{shippingInfo.oneDayShippingAvailable[0] === 'true' ? (<span class="material-symbols-outlined" style={{color:"green"}}>done</span>):(<span class="material-symbols-outlined" style={{color:"red"}}>close</span>)}</td>
+                            <div className="container">
+                                <div className="row">
+                                    <div className='col-sm-12 col-lg-6 fw-bolder'>One-Day Shipping Available</div>
+                                    <div className='col-sm-12 col-lg-6'>{shippingInfo.oneDayShippingAvailable[0] === 'true' ? (<span class="material-symbols-outlined" style={{color:"green"}}>done</span>):(<span class="material-symbols-outlined" style={{color:"red"}}>close</span>)}</div>
+                                </div>
+                            </div>
                         </tr>
                     )}
                     {selectedItem.returnsAccepted && (
                         <tr>
-                            <th scope="row">Returns Accepted</th>
-                            <td>{selectedItem.returnsAccepted[0] === 'true' ? (<span class="material-symbols-outlined" style={{color:"green"}}>done</span>):(<span class="material-symbols-outlined" style={{color:"red"}}>close</span>)}</td>
+                            <div className="container">
+                                <div className="row">
+                                    <div className='col-sm-12 col-lg-6 fw-bolder'>Returns Accepted</div>
+                                    <div className='col-sm-12 col-lg-6'>{selectedItem.returnsAccepted[0] === 'true' ? (<span class="material-symbols-outlined" style={{color:"green"}}>done</span>):(<span class="material-symbols-outlined" style={{color:"red"}}>close</span>)}</div>
+                                </div>
+                            </div>
                         </tr>
                     )}
                 </tbody>

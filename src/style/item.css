@@ -1,0 +1,24 @@
+.image-modal {
+    max-width: 100%;
+    max-height: 90vh;
+  }
+  
+  /* Style the carousel items (images) */
+  .carousel-item img {
+    border: 2px solid black; /* Add a black border to images */
+    width: 100%; /* Make images use the entire width of the modal */
+    object-fit: contain; /* Maintain aspect ratio of images */
+    margin: 0; /* Remove margin */
+    padding: 0; /* Remove padding */
+    max-height: 75vh; /* Adjust the maximum height as needed */
+  }
+
+  .custom-carousel {
+    .carousel-indicators {
+      display: none;
+    }
+  }
+  .carousel-item :active {
+    display: none;
+  }
+

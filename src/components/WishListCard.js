@@ -54,10 +54,25 @@ function WishListCard(props){
       };
 
     return(<>
-        <tr>
+        <tr className={props.itemId === id ? "table-light" : ""}>
             <td>{props.keys}</td>
             <td><img src={props.data.image} alt="item card" style={{height:"100px", width:"100px"}}/></td>
-            <td><p onClick={() => onProductNameClick(id)} style={{color:'blue'}}>{props.data.title}</p></td>
+            <td>
+              <p
+                onClick={() => onProductNameClick(id)}
+                style={{ color: 'blue' }}
+                title={props.data.title}
+              >
+                {props.data.title.length > 35 ? (() => {
+                  const truncated = props.data.title.slice(0, 35);
+                  if (truncated.charAt(35) !== ' ' && truncated.lastIndexOf(' ') > 0) {
+                    const lastSpaceIndex = truncated.lastIndexOf(' ');
+                    return `${truncated.slice(0, lastSpaceIndex)}...`;
+                  }
+                  return `${truncated}...`;
+                })() : props.data.title}
+              </p>
+            </td>
             <td>${props.data.price}</td>
             <td>{props.data.shippingOptions}</td>
             <td><button className="btn btn-light" style={{color:"#966919"}} onClick={() => onRemoveFromCartClick(id)}>
