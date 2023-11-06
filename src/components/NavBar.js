@@ -6,6 +6,7 @@ function NavBar(props){
     var item = dataEntries[0]["item"].find(item => item.itemId[0] === props.itemId)
     const [isItemInCart, setIsItemInCart] = useState(false);
     const [isItemInWishList, setIsItemInWishList] = useState(false);
+    const [priceTemp, setPriceTemp] = useState();
     console.log('wishListArray in navBar', props.wishListArray);
     //var isItemInWishList;
 
@@ -192,12 +193,17 @@ function NavBar(props){
                             className={`btn btn-light`}
                             onClick={props.handleResultsClick}
                         >
-                            List
+                            <span class="material-symbols-outlined" style={{verticalAlign:"middle"}}>
+                            chevron_left
+                            </span>List
                         </button>):(<button
                             className={`btn btn-light`}
                             onClick={props.handleWishList}
                         >
-                            List
+                            <span class="material-symbols-outlined" style={{verticalAlign:"middle"}}>
+                            chevron_left
+                            </span>List
+
                         </button>)}
                         </div>
                         <div className="col-6 col-md-6 text-end">
@@ -207,7 +213,7 @@ function NavBar(props){
                                 </div>
                                 {isItemInCart || isItemInWishList ? (
                                 <button className="btn btn-light" onClick={() => onRemoveFromCartClick(id)} style={{ color: "#966919" }}>
-                                    <span class="material-symbols-outlined">remove_shopping_cart</span>
+                                    <span class="material-icons">remove_shopping_cart</span>
                                 </button>
                                 ) : (
                                 <button className="btn btn-light" onClick={onAddToCartClick}>

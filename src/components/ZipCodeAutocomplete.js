@@ -37,18 +37,19 @@ function ZipCodeAutocomplete({ formData, setFormData }) {
     setSuggestions([]); // Clear the suggestions
   };
 
+  const disabled = location !== 'abcde';
+
   return (
     <div>
-      <div className="form-group">
+      <div className="form-group col-md-8 col-sm-12">
         <input
           type="text"
           className="form-control"
-          placeholder="Enter Zip Code"
           value={zipCode}
           onChange={handleInputChange}
-          disabled={location !== 'abcde'} // Disable input when location is not 'abcde'
+          disabled={disabled} // Disable input when location is not 'abcde'
         />
-        {suggestions.length > 0 && (
+        {!disabled && suggestions.length > 0 && (
           <div className="dropdown">
             <ul className="dropdown-menu" style={{ display: 'block', position: 'static' }}>
               {suggestions.map((suggestion, index) => (

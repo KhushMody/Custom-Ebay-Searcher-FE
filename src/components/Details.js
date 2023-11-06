@@ -34,7 +34,9 @@ function Details(props){
                 className="btn btn-light"
                 onClick={() => onProductNameClick(props.itemId)}
             >
-                Details
+                Details<span class="material-symbols-outlined" style={{verticalAlign:"middle"}}>
+                chevron_right
+                </span>
             </button>
         </div>
       )

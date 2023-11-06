@@ -5,7 +5,9 @@
   
   /* Style the carousel items (images) */
   .carousel-item img {
-    border: 2px solid black; /* Add a black border to images */
+    width: 400px;
+    height: 400px;
+    border: 8px solid black; /* Add a black border to images */
     width: 100%; /* Make images use the entire width of the modal */
     object-fit: contain; /* Maintain aspect ratio of images */
     margin: 0; /* Remove margin */
@@ -20,5 +22,10 @@
   }
   .carousel-item :active {
     display: none;
+  }
+
+  .underline-on-hover:hover {
+    text-decoration: underline;
+    cursor: pointer;
   }
 

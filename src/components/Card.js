@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import '../style/card.css'
+
 
 function Card(props){
     var id = props.data.itemId[0];
     //const id = props.data.itemId[0];
     const [isItemInCart, setIsItemInCart] = useState(false);
     const [isItemInWishList, setIsItemInWishList] = useState(false);
+    //const [priceTemp, setPriceTemp] = useState();
 
     useEffect(() => {
       // Check if props.wishListArray is defined and not empty
@@ -28,6 +31,7 @@ function Card(props){
         console.log('entering remove item');
         const updatedList = props.wishListArray.filter(item => item !== itemId);
         props.setWishListArray(updatedList);
+        //props.setWishlistTotal(props.wishlistTotal - priceTemp);
         // Make a GET request to your backend to remove the item from the cart
         fetch(backendUrl)
           .then((response) => {
@@ -54,10 +58,12 @@ function Card(props){
         const image = encodeURIComponent(props.data.galleryURL[0]);
         const title= encodeURIComponent(props.data.title[0]);
         const price= encodeURIComponent(props.data.sellingStatus[0].currentPrice[0].__value__);
-        const shippingOptions= encodeURIComponent(props.data.shippingInfo[0].shippingType[0]);
+        const shippingOptions= encodeURIComponent(shippingCostDisplay);
         const favoriteDetails= encodeURIComponent("Add any additional details here if needed");
         const shippingInfo = JSON.stringify(props.data.shippingInfo[0]);
         const shippingCost = JSON.stringify(props.data.shippingInfo[0].shippingServiceCost[0]);
+        //props.setWishlistTotal(props.wishlistTotal + price);
+        //setPriceTemp(price)
         //const shippingCostDisplay = shippingCost['@currencyId'] === 'USD' && shippingCost['__value__'] === '0.0' ? 'Free Shipping' : `${shippingCost['@currencyId']} ${shippingCost['__value__']}`;
 
         const backendUrl = `http://localhost:5000/api/addToCart?itemId=${ID}&image=${image}&title=${title}&price=${price}&shippingOptions=${shippingOptions}&favoriteDetails=${favoriteDetails}&shippingInfo=${shippingInfo}&shippingCost=${shippingCost}`;
@@ -117,14 +123,21 @@ function Card(props){
           });
       };
 
+    const shippingCostDisplay =parseFloat(props.data.shippingInfo[0].shippingServiceCost[0].__value__) === 0.0
+    ? 'Free Shipping'
+    : (props.data.shippingInfo[0].shippingServiceCost
+    ? `$${props.data.shippingInfo[0].shippingServiceCost[0].__value__}`
+    : 'N/A')
+
     return(<>
         <tr className={props.itemId === id ? "table-light" : ""}>
             <td>{props.keys}</td>
             <td><a href={props.data.galleryURL[0]} target="_blank" rel="noopener noreferrer"><img src={props.data.galleryURL[0]} style={{height:'100px', width:'100px'}} alt="item"/></a></td>
-            <td>
+            <td className="col-6 overFlow">
               <p
                 onClick={() => onProductNameClick(id)}
-                style={{ color: 'blue' }}
+                className="underline-on-hover"
+                style={{ color: 'blue'}}
                 title={props.data.title[0]}
               >
                 {props.data.title[0].length > 45 ? (() => {
@@ -138,10 +151,10 @@ function Card(props){
               </p>
             </td>
             <td>${props.data.sellingStatus[0].currentPrice[0].__value__}</td>
-            <td>{props.data.shippingInfo[0].shippingType[0]}</td>
+            <td>{shippingCostDisplay}</td>
             <td>{props.data.postalCode[0]}</td>
             <td>{isItemInCart||isItemInWishList ? (
-            <button className="btn btn-light"  onClick={() => onRemoveFromCartClick(id)} style={{color:"#966919"}}><span class="material-symbols-outlined">remove_shopping_cart</span></button>
+            <button className="btn btn-light"  onClick={() => onRemoveFromCartClick(id)} style={{color:"#966919", fill:"1"}}><span class="material-icons">remove_shopping_cart</span></button>
           ) : (
             <button className="btn btn-light" onClick={onAddToCartClick} ><span class="material-symbols-outlined">add_shopping_cart</span></button>
           )}</td>

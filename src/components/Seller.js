@@ -10,9 +10,9 @@ function Seller(props) {
     return (
         <table className="table table-striped table-dark">
             <thead>
-                {storeInfo && storeInfo.StoreName && (
+                {storeInfo && sellerInfo.UserID && (
                     <tr style={{textAlign:"center"}}>
-                        <th colspan="100%">{storeInfo.StoreName}</th>
+                        <th colspan="100%">{sellerInfo.UserID}</th>
                     </tr>
                 )}
             </thead>

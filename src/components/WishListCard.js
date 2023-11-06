@@ -1,4 +1,5 @@
 import React from "react";
+import '../style/card.css'
 
 function WishListCard(props){
     var id = props.data.itemId;
@@ -56,10 +57,11 @@ function WishListCard(props){
     return(<>
         <tr className={props.itemId === id ? "table-light" : ""}>
             <td>{props.keys}</td>
-            <td><img src={props.data.image} alt="item card" style={{height:"100px", width:"100px"}}/></td>
-            <td>
+            <td><a href={props.data.image} target="_blank" rel="noopener noreferrer"><img src={props.data.image} alt="item card" style={{height:"100px", width:"100px"}}/></a></td>
+            <td className="overFlow">
               <p
                 onClick={() => onProductNameClick(id)}
+                className="underline-on-hover"
                 style={{ color: 'blue' }}
                 title={props.data.title}
               >
@@ -76,7 +78,7 @@ function WishListCard(props){
             <td>${props.data.price}</td>
             <td>{props.data.shippingOptions}</td>
             <td><button className="btn btn-light" style={{color:"#966919"}} onClick={() => onRemoveFromCartClick(id)}>
-              <span class="material-symbols-outlined">remove_shopping_cart</span>
+              <span class="material-icons">remove_shopping_cart</span>
             </button></td>
         </tr>
     </>)

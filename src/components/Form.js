@@ -38,6 +38,7 @@ function Form() {
   const [prevListState, setPrevListState] = useState('results')
   const [detailsButton, setDetailsButton] = useState(false);
   const [currLocation, setCurrLocation] = useState('');
+  const [wishlistTotal, setWishlistTotal] = useState(0);
 
 
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -94,8 +95,9 @@ function Form() {
   };
   
 
-  const handleReset = () => {
+  const handleReset = (e) => {
     // Reset the form data to its initial state
+    e.preventDefault();
     setFormSubmitted(false);
     setKeywordInputStyles({});
     setKeywordError('');
@@ -114,6 +116,9 @@ function Form() {
         location: currLocation,
         zipCode: ''
     });
+    setData(false);
+    setWishlistActive(false);
+    setResultsActive(true);
   };
 
   const handleSubmit = (e) => {
@@ -126,7 +131,6 @@ function Form() {
     setNavigationBar(false);
     setSimilarProductsData();
     setCheckWishlist(false);
-    startProgressBar();
     setDetailsButton(false);
     const queryParams = new URLSearchParams(formData).toString();
     if (formData.keyword.trim() === '') {
@@ -151,6 +155,7 @@ function Form() {
       console.log('no zip code found');
     }
     else{
+      startProgressBar();
       console.log(`http://localhost:5000/api/search?${queryParams}`)
       fetch(`http://localhost:5000/api/search?${queryParams}`)
       .then((response) => {
@@ -169,7 +174,27 @@ function Form() {
       .catch((error) => {
           console.error('Error:', error);
       });
+      matchData();
     }
+  };
+
+  const matchData = () => {
+    fetch('http://localhost:5000/api/favorites')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Set the favoritesData state with the retrieved data
+        console.log('Data from mongoDB:',data);
+        setFavoritesData(data);
+        //setCheckWishlist(true);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   };
 
   const handleWishList = () => {
@@ -177,6 +202,7 @@ function Form() {
     setPrevListState('wishlist');
     setWishlistActive(true);
     setResultsActive(false);
+    setSelectedNavItem('product');
     fetch('http://localhost:5000/api/favorites')
       .then((response) => {
         if (!response.ok) {
@@ -252,6 +278,7 @@ const handleResultsClick = () => {
   setWishlistActive(false);
   setSelectedItem(false);
   setCheckWishlist(false);
+  setSelectedNavItem('product')
   // Add your logic for handling the Results button click
 };
 
@@ -262,14 +289,15 @@ const handleResultsClick = () => {
       <form onSubmit={handleSubmit} className='mb-3 offset-md-3' noValidate>
           <div className="row mb-3">
             <div className="col-sm-12 col-md-2">
-                <label for="keyword" className="col-form-label">Keyword*</label>
+                <label for="keyword" className="col-form-label">Keyword<span style={{color:"red"}}>*</span></label>
             </div>
-            <div className="col-sm-12 col-md-6" style={{paddingLeft:'0'}}>
+            <div className="col-sm-12 col-md-6">
             <input
                         type="text"
                         className="form-control"
                         id="keyword"
                         name="keyword"
+                        placeholder="Enter Product Name (eg. iPhone 8)"
                         value={formData.keyword}
                         onChange={handleChange}
                         style={keywordInputStyles}
@@ -288,7 +316,7 @@ const handleResultsClick = () => {
                 Category
             </label>
             
-            <div className='col-md-2 col-12' style={{paddingLeft:'0'}}>
+            <div className='col-md-2 col-12'>
                 <select
                     id="category"
                     name="category"
@@ -313,7 +341,7 @@ const handleResultsClick = () => {
             <label htmlFor="condition" className="col-md-2 col-form-label col-12">
                 Condition
             </label>
-            <div className='col-md-1 form-check form-check-inline col-12'>
+            <div className='col-2 col-md-1 form-check form-check-inline' style={{paddingLeft:"36px"}}>
                 <input
                 type="checkbox"
                 id="new"
@@ -327,7 +355,7 @@ const handleResultsClick = () => {
                 New
                 </label>
             </div>
-            <div className='col-md-1 form-check form-check-inline'>
+            <div className='col-2 col-md-1 form-check form-check-inline'>
                 <input
                 type="checkbox"
                 id="Used"
@@ -341,7 +369,7 @@ const handleResultsClick = () => {
                 Used
                 </label>
             </div>
-            <div className='col-md-2 form-check form-check-inline'>
+            <div className='col-2 col-md-2 form-check form-check-inline'>
                 <input
                 type="checkbox"
                 id="Unspecified"
@@ -355,6 +383,7 @@ const handleResultsClick = () => {
                 Unspecified
                 </label>
             </div>
+
         </div>
 
         
@@ -362,7 +391,7 @@ const handleResultsClick = () => {
             <label htmlFor="shippingOptions" className="col-12 col-md-2 col-form-label">
                 Shipping Options
             </label>
-            <div className='col-md-2 form-check form-check-inline'>
+            <div className='col-5 col-md-2 form-check form-check-inline' style={{paddingLeft:"36px"}}>
                 <input
                 type="checkbox"
                 id="localPickup"
@@ -376,7 +405,7 @@ const handleResultsClick = () => {
                 Local Pickup
                 </label>
             </div>
-            <div className='col-md-2 form-check form-check-inline'>
+            <div className='col-5 col-md-2 form-check form-check-inline'>
                 <input
                 type="checkbox"
                 id="freeShipping"
@@ -396,7 +425,7 @@ const handleResultsClick = () => {
               <label htmlFor="distance" className="col-12 col-md-2 col-form-label">
                 Distance (Miles)
               </label>
-              <div className='col-12 col-md-2' style={{paddingLeft:'0'}}>
+              <div className='col-12 col-md-2'>
               <input
                 type="text"
                 className="form-control"
@@ -410,10 +439,10 @@ const handleResultsClick = () => {
 
         <div className="row mb-3">
                 <label htmlFor="location" className="col-12 col-md-2 col-form-label">
-                    From*
+                    From<span style={{color:"red"}}>*</span>
                 </label>
-                <div className='col-md-4 form-check form-check-inline' style={{textAlign:'left'}}>
-                <div className='col-sm-12'>
+                <div className='col-md-9 form-check form-check-inline' style={{paddingRight:"0px"}}>
+                <div className='col-sm-12' style={{paddingLeft:"12px"}}>
                     <input
                     type="radio"
                     id="currentLocation"
@@ -427,7 +456,7 @@ const handleResultsClick = () => {
                     'Current Location'
                     </label>
                 </div>
-                <div className='col-sm-12'>
+                <div className='col-sm-12' style={{paddingLeft:"12px"}}>
                     <input
                     type="radio"
                     id="otherLocation"
@@ -441,14 +470,15 @@ const handleResultsClick = () => {
                         Other. Please specify zip code:
                     </label>
                 </div>
-                <div className='col-sm-12' style={{padding:"0"}}>
+                <div className='col-sm-12 col-12' style={{marginLeft:"-12px", paddingRight:"0px"}}>
                 <ZipCodeAutocomplete
                   formData={formData}
                   setFormData={setFormData}
                 />
-                  {formSubmitted && formData.zipCode.trim() === '' && formData.location === 'abcde' && (
-                    <div className="text-danger" style={{display:'flex'}}>{locationError}</div>
-                  )}
+                  {((formData.zipCode.trim() === '') ||
+       (formSubmitted && formData.location === 'abcde' && formData.zipCode.trim() === '')) && (
+        <div className="text-danger" style={{display:'flex'}}>{locationError}</div>
+      )}
                 </div>
                 </div>
                 {/* <div>
@@ -457,7 +487,7 @@ const handleResultsClick = () => {
         </div>
 
         <div className="d-flex">
-          <button type="submit" className="btn btn-secondary text-dark" style={{ margin: '10px', display: 'flex', alignItems: 'center' }}>
+          <button type="submit" className="btn btn-light" style={{ margin: '10px', display: 'flex', alignItems: 'center' }} disabled={formData.keyword === ''}>
             <span className="material-icons" style={{ verticalAlign: 'middle' }}>
               search
             </span>
@@ -507,7 +537,7 @@ const handleResultsClick = () => {
     </div>
       {!checkWishlist && selectedItem && navigationBar && <NavBar handleWishList={handleWishList} prevListState={prevListState} handleResultsClick={handleResultsClick} setCheckWishlist={setCheckWishlist} setSelectedItem={selectedItem} setWishListArray={setWishListArray} wishListArray = {wishListArray} favoritesData = {favoritesData} removeCartItem={removeCartItem} data = {data} itemId = {itemId} selectedNavItem={selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData} selectedItem={selectedItem} setSimilarProductsData={setSimilarProductsData}/>}
       {!selectedItem && data && detailsButton && <Details itemId={itemId} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar} setCheckWishlist={setCheckWishlist}></Details>}
-      {!checkWishlist && !selectedItem && data && <Table itemId={itemId} setDetailsButton={setDetailsButton} wishListArray={wishListArray} setWishListArray={setWishListArray} data={data} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar} setFavoritesData={setFavoritesData} favoritesData={favoritesData} removeCartItem={removeCartItem}/>}
+      {!checkWishlist && !selectedItem && data && <Table wishlistTotal={wishlistTotal} setWishlistTotal={setWishlistTotal} itemId={itemId} setDetailsButton={setDetailsButton} wishListArray={wishListArray} setWishListArray={setWishListArray} data={data} setSelectedItem={setSelectedItem} setItemId={setItemId} setNavigationBar={setNavigationBar} setFavoritesData={setFavoritesData} favoritesData={favoritesData} removeCartItem={removeCartItem}/>}
       {!checkWishlist && selectedItem && data && selectedNavItem === 'product' && <Item selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData={setPhotosData}/>}
       {!checkWishlist && selectedItem && data && selectedNavItem === 'photos' && <Photos selectedItem={selectedItem} setSelectedItem={setSelectedItem} selectedNavItem = {selectedNavItem} setSelectedNavItem={setSelectedNavItem} setPhotosData = {setPhotosData} photosData={photosData}/>}
       {!checkWishlist && selectedItem && data && selectedNavItem === 'shipping' && <Shipping itemId={itemId} data={data} favoritesData={favoritesData}/>}

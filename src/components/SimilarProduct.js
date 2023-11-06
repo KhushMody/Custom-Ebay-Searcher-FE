@@ -8,6 +8,7 @@ function SimilarProduct(props) {
   const [showAll, setShowAll] = useState(false);
 
   const similarItems = similarProductsData?.getSimilarItemsResponse?.itemRecommendations?.item || [];
+  console.log(similarItems.length);
 
   const getDaysLeft = (timeLeft) => {
     const daysMatch = timeLeft.match(/(\d+)D/);
@@ -42,13 +43,17 @@ function SimilarProduct(props) {
   });
 
   const maxItems = showAll ? sortedItems.length : 5;
+  console.log(window.innerWidth)
 
   return (
-    <div style={{ padding: "10px" }}>
+    <>
+    {
+      similarItems.length>0 && (
+        <div style={{ padding: "10px" }}>
       <div style={{ padding: "10px" }}>
         <div className="mb-3 row">
-          <div style={{ marginRight: "5px" }} className="col-md-2 col-sm-12">
-            <select onChange={(e) => setSortCategory(e.target.value)} className="col-sm-12">
+          <div style={{ marginRight: "5px", paddingLeft:"0"}} className="col-md-2 col-sm-12">
+            <select onChange={(e) => setSortCategory(e.target.value)} className="col-sm-12 form-select">
               <option value="Default">Default</option>
               <option value="Product Name">Product Name</option>
               <option value="Days Left">Days Left</option>
@@ -56,8 +61,8 @@ function SimilarProduct(props) {
               <option value="Shipping Cost">Shipping Cost</option>
             </select>
           </div>
-          <div className="col-md-2 col-sm-12">
-            <select onChange={(e) => setSortOrder(e.target.value)} className="col-sm-12">
+          <div style={{ marginRight: "5px", paddingLeft:"0"}} className="col-md-2 col-sm-12">
+            <select onChange={(e) => setSortOrder(e.target.value)} className="col-sm-12 form-select">
               <option value="Ascending">Ascending</option>
               <option value="Descending">Descending</option>
             </select>
@@ -68,15 +73,16 @@ function SimilarProduct(props) {
         const daysMatch = item.timeLeft.match(/(\d+)D/);
         const days = daysMatch ? parseInt(daysMatch[1], 10) : 0;
         return (
+        <div className="container">
           <div key={index}  >
             <table className="table table-striped table-dark">
-            <tr className="row">
+            <tr className="row" style={{backgroundColor: '#343a40'}}>
               <div className="col-sm-12 col-md-2" style={{backgroundColor: '#343a40', margin: "0", padding: "0", border: "none" }}>
                 <td style={{backgroundColor: '#343a40', borderColor: '#343a40'}}>
-                  <img src={item.imageURL} style={{ height: "100px", width: "100px", backgroundColor: '#343a40', margin: "0", padding: "0", border: "none" }} alt="item" />
+                  <img src={item.imageURL} style={{ height: "120px", width: "120px", backgroundColor: '#343a40', margin: "0", padding: "0", border: "none" }} alt="item" />
                 </td>
               </div>
-              <div className="col-md-10 col-sm-12" style={{backgroundColor: '#343a40'}}>
+              <div className="col-md-10 col-sm-12 similar-product-right-card" style={{backgroundColor: "#343a40"}}>
                 <td style={{backgroundColor: '#343a40', borderColor: '#343a40'}}>
                   <p
                     style={{ color: "blue", cursor: "pointer", backgroundColor: '#343a40', margin: "0", padding: "0", border: "none" }}
@@ -93,6 +99,7 @@ function SimilarProduct(props) {
 
             </table>
           </div>
+        </div>
         );
       })}
       <div style={{ textAlign: "center" }}>
@@ -101,6 +108,14 @@ function SimilarProduct(props) {
         </button>
       </div>
     </div>
+      )
+    }
+    {similarItems.length === 0 && <div class="alert alert-warning" role="alert">
+  No Records.
+</div>}
+    </>
+    
+  
   );
 }
 

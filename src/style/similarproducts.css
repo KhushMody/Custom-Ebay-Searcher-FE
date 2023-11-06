@@ -1,3 +1,27 @@
 .table>:not(caption)>*>* {
     background-color: #454d55;
 }
+
+@media (min-width: 768px) {
+    .custom-div {
+      background-color: #343a40;
+      padding: 0;
+      margin-left: 25px;
+    }
+    .similar-product-right-card {
+        margin-left: -6vh;
+    }
+  }
+  
+  /* Define styles for screens narrower than 768px (smaller screens) */
+@media (max-width: 767px) {
+    .custom-div {
+      background-color: #343a40;
+      padding: 0;
+      margin-left: 0;
+    }
+}
+
+.row>*{
+    padding-left: 0;
+}
